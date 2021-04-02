@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NbSortDirection, NbSortRequest, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 
+import { Pokemon } from '../../models/pokemon';
 import { ItemTableService } from '../item-table/item-table.service';
 
 interface TreeNode<T> {
@@ -9,10 +10,6 @@ interface TreeNode<T> {
   expanded?: boolean;
 }
 
-interface FSEntry {
-  name: string;
-  url: string;
-}
 @Component({
   selector: 'app-item-table',
   templateUrl: './item-table.component.html',
@@ -20,23 +17,28 @@ interface FSEntry {
 })
 export class ItemTableComponent implements OnInit {
   customColumn = 'name';
-  defaultColumns = [ 'size', 'kind', 'items' ];
+  data: TreeNode<Pokemon>[] = [];
+  defaultColumns = [ 'url' ];
   allColumns = [ this.customColumn, ...this.defaultColumns ];
 
-  dataSource: NbTreeGridDataSource<FSEntry>;
+  dataSource: NbTreeGridDataSource<Pokemon>;
 
   sortColumn: string = '';
   sortDirection: NbSortDirection = NbSortDirection.NONE;
 
   constructor(
-    private dataSourceBuilder: NbTreeGridDataSourceBuilder<FSEntry>,
+    private dataSourceBuilder: NbTreeGridDataSourceBuilder<Pokemon>,
     private itemTableService: ItemTableService,
   ) {
     this.dataSource = this.dataSourceBuilder.create(this.data);
   }
 
   ngOnInit() {
-    this.itemTableService.getPokemons();
+    this.itemTableService.getPokemons()
+      .subscribe(({ results: pokemons }) => {
+        this.data = pokemons.map(pokemon => ({ data: { ...pokemon } }));
+        this.dataSource.setData(this.data);
+      });
   }
 
   updateSort(sortRequest: NbSortRequest): void {
@@ -50,10 +52,6 @@ export class ItemTableComponent implements OnInit {
     }
     return NbSortDirection.NONE;
   }
-
-  private data: TreeNode<FSEntry>[] = [
-
-  ];
 
   getShowOn(index: number) {
     const minWithForMultipleColumns = 400;
