@@ -4,6 +4,22 @@ button[nbTreeGridRowToggle] {
   padding: 0;
 }
 
+.main-panel {
+  display: flex;
+
+  app-item-card {
+    width: calc(55% - 85px);
+  }
+
+  .row {
+    cursor: pointer;
+  }
+
+  table {
+    margin-right: 3%;
+  }
+}
+
 .search-label {
   display: block;
 }

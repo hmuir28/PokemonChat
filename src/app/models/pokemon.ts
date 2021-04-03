@@ -1,4 +1,4 @@
-export class Pokemon {
+export default class Pokemon {
   name: string;
   url: string;
 

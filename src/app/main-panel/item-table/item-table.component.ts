@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NbSortDirection, NbSortRequest, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
+import { Subscription } from 'rxjs';
 
-import { Pokemon } from '../../models/pokemon';
-import { ItemTableService } from '../item-table/item-table.service';
+import { PokemonService } from '../../services/pokemon';
+import Pokemon from '../../models/pokemon';
 
 interface TreeNode<T> {
   data: T;
@@ -15,7 +16,7 @@ interface TreeNode<T> {
   templateUrl: './item-table.component.html',
   styleUrls: ['./item-table.component.scss']
 })
-export class ItemTableComponent implements OnInit {
+export class ItemTableComponent implements OnInit, OnDestroy {
   customColumn = 'name';
   data: TreeNode<Pokemon>[] = [];
   defaultColumns = [ 'url' ];
@@ -25,26 +26,28 @@ export class ItemTableComponent implements OnInit {
 
   sortColumn: string = '';
   sortDirection: NbSortDirection = NbSortDirection.NONE;
+  pokemonsSubscription!: Subscription;
+  selectedPokemon!: Pokemon;
 
   constructor(
     private dataSourceBuilder: NbTreeGridDataSourceBuilder<Pokemon>,
-    private itemTableService: ItemTableService,
+    private pokemonService: PokemonService,
   ) {
     this.dataSource = this.dataSourceBuilder.create(this.data);
   }
 
   ngOnInit() {
-    this.itemTableService.getPokemons()
+    this.pokemonsSubscription = this.pokemonService.getPokemons()
       .subscribe(({ results: pokemons }) => {
         this.data = pokemons.map(pokemon => ({ data: { ...pokemon } }));
         this.dataSource.setData(this.data);
       });
   }
 
-  updateSort(sortRequest: NbSortRequest): void {
-    this.sortColumn = sortRequest.column;
-    this.sortDirection = sortRequest.direction;
+  ngOnDestroy() {
+    this.pokemonsSubscription.unsubscribe();
   }
+
 
   getSortDirection(column: string): NbSortDirection {
     if (this.sortColumn === column) {
@@ -57,5 +60,14 @@ export class ItemTableComponent implements OnInit {
     const minWithForMultipleColumns = 400;
     const nextColumnStep = 100;
     return minWithForMultipleColumns + (nextColumnStep * index);
+  }
+
+  selectItem(pokemon: Pokemon) {
+    this.selectedPokemon = pokemon;
+  }
+
+  updateSort(sortRequest: NbSortRequest): void {
+    this.sortColumn = sortRequest.column;
+    this.sortDirection = sortRequest.direction;
   }
 }

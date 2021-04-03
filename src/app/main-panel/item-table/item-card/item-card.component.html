@@ -1,0 +1,16 @@
+<nb-card *ngIf="pokemonDetails" class="card">
+  <nb-card-header>{{ pokemon.name }}</nb-card-header>
+  <nb-card-body>
+    <span>Images: </span>
+    <div class="images-block">
+      <div *ngFor="let key of spritesKeys">
+        <img *ngIf="pokemonDetails.sprites[key] && isPropString(pokemonDetails.sprites[key])" [src]="pokemonDetails.sprites[key]" width="100" height="100" />
+      </div>
+    </div>
+    <span>Abilities: </span>
+    <ul>
+      <li *ngFor="let ability of pokemonDetails.abilities">{{ ability.ability.name }}</li>
+    </ul>
+  </nb-card-body>
+  <nb-card-footer>In Progress...</nb-card-footer>
+</nb-card>

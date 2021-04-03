@@ -12,12 +12,14 @@ import { ItemTableComponent } from './main-panel/item-table/item-table.component
 // Additional Node Modules
 import { NbCardModule, NbLayoutModule, NbTreeGridModule, NbThemeModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
+import { ItemCardComponent } from './main-panel/item-table/item-card/item-card.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainPanelComponent,
-    ItemTableComponent
+    ItemTableComponent,
+    ItemCardComponent
   ],
   imports: [
     AppRoutingModule,
