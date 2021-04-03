@@ -9,7 +9,10 @@ import { AppComponent } from './app.component';
 import { MainPanelComponent } from './main-panel/main-panel.component';
 import { ItemTableComponent } from './main-panel/item-table/item-table.component';
 
+import FirebaseConfig from './config/firebase-config';
+
 // Additional Node Modules
+import { AngularFireModule } from '@angular/fire';
 import { NbCardModule, NbLayoutModule, NbTreeGridModule, NbThemeModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ItemCardComponent } from './main-panel/item-table/item-card/item-card.component';
@@ -23,6 +26,7 @@ import { ItemCardComponent } from './main-panel/item-table/item-card/item-card.c
   ],
   imports: [
     AppRoutingModule,
+    AngularFireModule.initializeApp(FirebaseConfig),
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
