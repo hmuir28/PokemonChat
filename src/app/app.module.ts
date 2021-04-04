@@ -24,6 +24,8 @@ import {
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ItemCardComponent } from './main-panel/item-table/item-card/item-card.component';
 import { LoginComponent } from './login/login.component';
+import { SignupComponent } from './signup/signup.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { LoginComponent } from './login/login.component';
     MainPanelComponent,
     ItemTableComponent,
     ItemCardComponent,
-    LoginComponent
+    LoginComponent,
+    SignupComponent,
+    NavbarComponent
   ],
   imports: [
     AppRoutingModule,

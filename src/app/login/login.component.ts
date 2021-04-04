@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { localStorageKeys } from '../config/constants';
+import { Router } from '@angular/router';
+import { localStorageKeys, routes } from '../config/constants';
 import { FirebaseService } from '../services/firebase.service';
 
 @Component({
@@ -11,13 +12,14 @@ export class LoginComponent implements OnInit {
 
   isSignedIn: boolean = false;
   
-  constructor(private firebaseService: FirebaseService) { }
+  constructor(
+    private firebaseService: FirebaseService,
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
     if (localStorage.getItem(localStorageKeys.user)) {
-      this.isSignedIn = true;
-    } else {
-      this.isSignedIn = false;
+      this.router.navigate([routes.pokemons]);
     }
   }
 
@@ -25,7 +27,7 @@ export class LoginComponent implements OnInit {
     try {
       await this.firebaseService.signIn(email, password);
       if (this.firebaseService.isLoggedIn) {
-        this.isSignedIn = true;
+        this.router.navigate([routes.pokemons]);
       }
     } catch {}
   }
