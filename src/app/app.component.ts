@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { localStorageKeys } from './config/constants';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Chat';
+
+  isLoggedIn() {
+    return localStorage.getItem(localStorageKeys.user);
+  }
 }

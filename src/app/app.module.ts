@@ -16,8 +16,10 @@ import { AngularFireModule } from '@angular/fire';
 import {
   NbButtonModule,
   NbCardModule,
+  NbContextMenuModule,
   NbInputModule,
   NbLayoutModule,
+  NbMenuModule,
   NbTreeGridModule,
   NbThemeModule,
 } from '@nebular/theme';
@@ -46,8 +48,10 @@ import { NavbarComponent } from './navbar/navbar.component';
     NbThemeModule.forRoot({ name: 'cosmic' }),
     NbButtonModule,
     NbCardModule,
+    NbContextMenuModule,
     NbInputModule,
     NbLayoutModule,
+    NbMenuModule.forRoot(),
     NbTreeGridModule,
     NbEvaIconsModule
   ],
