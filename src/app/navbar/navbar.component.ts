@@ -3,8 +3,7 @@ import { Router } from '@angular/router';
 import { NbMenuService } from '@nebular/theme';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-import { localStorageKeys } from '../config/constants';
+import { FirebaseService } from '../services/firebase.service';
 
 @Component({
   selector: 'app-navbar',
@@ -21,6 +20,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   itemsSubscription!: Subscription;
 
   constructor(
+    private firebaseFirebase: FirebaseService,
     private nbMenuService: NbMenuService,
     private router: Router,
   ) {}
@@ -42,7 +42,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   handleLogout() {
-    this.router.navigate(['login'])
-      .then(() => localStorage.removeItem(localStorageKeys.user));
+    this.firebaseFirebase.logOut()
+      .then(() => this.router.navigate(['login']));
   }
 }

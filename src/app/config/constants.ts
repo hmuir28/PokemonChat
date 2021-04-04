@@ -3,5 +3,7 @@ export const localStorageKeys = {
 };
 
 export const routes = {
-  pokemons: 'pokemons'
+  login: 'login',
+  pokemons: 'pokemons',
+  signup: 'signup',
 };

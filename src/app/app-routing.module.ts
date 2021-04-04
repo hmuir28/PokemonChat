@@ -1,19 +1,43 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 import { LoginComponent } from './login/login.component';
 import { MainPanelComponent } from './main-panel/main-panel.component';
 import { SignupComponent } from './signup/signup.component';
 
-const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'pokemons', component: MainPanelComponent },
-  { path: 'signup', component: SignupComponent },
+import { routes } from './config/constants';
+import { pipe } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+const redirectUnauthorizedToLogin = () => pipe(
+  tap(() => console.info('it will be redirected')),
+  redirectUnauthorizedTo(routes.login),
+)
+
+const angularRoutes: Routes = [
+  {
+    path: routes.login,
+    component: LoginComponent,
+  },
+  {
+    ...canActivate(redirectUnauthorizedToLogin),
+    path: routes.pokemons,
+    component: MainPanelComponent,
+  },
+  {
+    path: routes.signup,
+    component: SignupComponent,
+  },
+  {
+    path: '',
+    redirectTo: `/${routes.login}`,
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(angularRoutes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

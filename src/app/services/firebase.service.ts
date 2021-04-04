@@ -29,7 +29,7 @@ export class FirebaseService {
   }
 
   logOut() {
-    this.firebaseAuth.signOut();
-    localStorage.removeItem(localStorageKeys.user);
+    return this.firebaseAuth.signOut()
+      .then(() => localStorage.removeItem(localStorageKeys.user));
   }
 }
