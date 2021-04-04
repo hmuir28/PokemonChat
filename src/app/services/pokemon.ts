@@ -8,7 +8,8 @@ import { Observable } from 'rxjs';
 import Pokemon from '../models/pokemon';
 import PokemonDetails from '../models/pokemon-details';
 
-interface IPokemonsResponse {
+export interface IPokemonsResponse {
+  next: string,
   results: Pokemon[],
 };
 
@@ -19,8 +20,8 @@ export class PokemonService {
   
   constructor(private http: HttpClient) {}
 
-  getPokemons(): Observable<IPokemonsResponse> {
-    return this.http.get<IPokemonsResponse>(`${pokemonsUrl}?limit=100&offset=200`);
+  getPokemons(url = pokemonsUrl): Observable<IPokemonsResponse> {
+    return this.http.get<IPokemonsResponse>(url);
   }
 
   getPokemon(url: string): Observable<PokemonDetails> {

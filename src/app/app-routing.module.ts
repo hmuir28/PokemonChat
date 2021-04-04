@@ -7,13 +7,8 @@ import { MainPanelComponent } from './main-panel/main-panel.component';
 import { SignupComponent } from './signup/signup.component';
 
 import { routes } from './config/constants';
-import { pipe } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
-const redirectUnauthorizedToLogin = () => pipe(
-  tap(() => console.info('it will be redirected')),
-  redirectUnauthorizedTo(routes.login),
-)
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(routes.login);
 
 const angularRoutes: Routes = [
   {

@@ -16,7 +16,7 @@ import { FirebaseService } from '../services/firebase.service';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
 
-  items = [{ title: 'Log out' }];
+  items = [{ title: 'Sign out' }];
   itemsSubscription!: Subscription;
 
   constructor(
@@ -30,7 +30,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .pipe(map(({ item: { title } }) => title))
       .subscribe(title => {
         switch (title) {
-          case 'Log out':
+          case 'Sign out':
             this.handleLogout();
             break;
         }

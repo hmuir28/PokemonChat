@@ -17,14 +17,16 @@ import {
   NbButtonModule,
   NbCardModule,
   NbContextMenuModule,
+  NbDialogModule,
   NbInputModule,
   NbLayoutModule,
   NbMenuModule,
   NbTreeGridModule,
   NbThemeModule,
+  NbWindowModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
-import { ItemCardComponent } from './main-panel/item-table/item-card/item-card.component';
+import { ShowItemComponent } from './main-panel/item-table/show-item/show-item.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -34,7 +36,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     AppComponent,
     MainPanelComponent,
     ItemTableComponent,
-    ItemCardComponent,
+    ShowItemComponent,
     LoginComponent,
     SignupComponent,
     NavbarComponent
@@ -49,11 +51,13 @@ import { NavbarComponent } from './navbar/navbar.component';
     NbButtonModule,
     NbCardModule,
     NbContextMenuModule,
+    NbDialogModule.forRoot(),
     NbInputModule,
     NbLayoutModule,
     NbMenuModule.forRoot(),
     NbTreeGridModule,
-    NbEvaIconsModule
+    NbEvaIconsModule,
+    NbWindowModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
