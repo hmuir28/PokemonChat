@@ -1,0 +1,14 @@
+<nb-layout>
+  <nb-layout-column class="container">
+    <nb-card>
+      <nb-card-body>
+        <input type="text" #email nbInput fullWidth fieldSize="small" placeholder="Email">
+        <input type="password" #password nbInput fullWidth fieldSize="small" placeholder="Password">
+        <button nbButton fullWidth (click)="onSignIn(email.value, password.value)">Sign In</button>
+      </nb-card-body>
+      <nb-card-footer>
+        <a routerLink="/signup">Sign Up</a>
+      </nb-card-footer>
+    </nb-card>
+  </nb-layout-column>
+</nb-layout>

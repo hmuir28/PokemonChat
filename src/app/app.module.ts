@@ -13,16 +13,25 @@ import FirebaseConfig from './config/firebase-config';
 
 // Additional Node Modules
 import { AngularFireModule } from '@angular/fire';
-import { NbCardModule, NbLayoutModule, NbTreeGridModule, NbThemeModule } from '@nebular/theme';
+import {
+  NbButtonModule,
+  NbCardModule,
+  NbInputModule,
+  NbLayoutModule,
+  NbTreeGridModule,
+  NbThemeModule,
+} from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ItemCardComponent } from './main-panel/item-table/item-card/item-card.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainPanelComponent,
     ItemTableComponent,
-    ItemCardComponent
+    ItemCardComponent,
+    LoginComponent
   ],
   imports: [
     AppRoutingModule,
@@ -31,7 +40,9 @@ import { ItemCardComponent } from './main-panel/item-table/item-card/item-card.c
     BrowserAnimationsModule,
     HttpClientModule,
     NbThemeModule.forRoot({ name: 'cosmic' }),
+    NbButtonModule,
     NbCardModule,
+    NbInputModule,
     NbLayoutModule,
     NbTreeGridModule,
     NbEvaIconsModule
