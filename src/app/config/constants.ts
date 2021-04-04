@@ -7,3 +7,8 @@ export const routes = {
   pokemons: 'pokemons',
   signup: 'signup',
 };
+
+export const messageStatus = {
+  success: 'success',
+  error: 'danger',
+}

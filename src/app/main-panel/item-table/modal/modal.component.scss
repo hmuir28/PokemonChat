@@ -1,0 +1,35 @@
+/* MODAL STYLES
+-------------------------------*/
+jw-modal {
+  display: none;
+
+  .jw-modal {
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+    position: fixed; 
+    right: 0;
+    top: 25%;
+    z-index: 1000;
+
+    .jw-modal-body {
+      margin: 0 30%;
+      padding: 0;
+    }
+  }
+
+  .jw-modal-background {
+    background-color: #000;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    opacity: 0.75;
+    position: fixed;
+    top: 0;
+    z-index: 900;
+  }
+}
+
+body.jw-modal-open {
+  overflow: hidden;
+}

@@ -21,15 +21,18 @@ import {
   NbInputModule,
   NbLayoutModule,
   NbMenuModule,
+  NbToastrModule,
   NbTreeGridModule,
   NbThemeModule,
-  NbWindowModule,
+  NbGlobalPhysicalPosition,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
-import { ShowItemComponent } from './main-panel/item-table/show-item/show-item.component';
+
 import { LoginComponent } from './login/login.component';
-import { SignupComponent } from './signup/signup.component';
+import { ModalComponent } from './main-panel/item-table/modal/modal.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { SignupComponent } from './signup/signup.component';
+import { ShowItemComponent } from './main-panel/item-table/show-item/show-item.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +42,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     ShowItemComponent,
     LoginComponent,
     SignupComponent,
-    NavbarComponent
+    NavbarComponent,
+    ModalComponent
   ],
   imports: [
     AppRoutingModule,
@@ -55,9 +59,9 @@ import { NavbarComponent } from './navbar/navbar.component';
     NbInputModule,
     NbLayoutModule,
     NbMenuModule.forRoot(),
+    NbToastrModule.forRoot({ position: NbGlobalPhysicalPosition.TOP_RIGHT }),
     NbTreeGridModule,
     NbEvaIconsModule,
-    NbWindowModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

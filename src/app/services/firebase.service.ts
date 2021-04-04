@@ -8,24 +8,14 @@ import { localStorageKeys } from '../config/constants';
 })
 export class FirebaseService {
 
-  isLoggedIn: boolean = false;
-
   constructor(private firebaseAuth: AngularFireAuth) {}
 
-  async signIn(email: string, password: string) {
-    try {
-      const res = await this.firebaseAuth.signInWithEmailAndPassword(email, password);
-      this.isLoggedIn = true;
-      localStorage.setItem(localStorageKeys.user, JSON.stringify(res.user));
-    } catch {}
+  signIn(email: string, password: string) {
+    return this.firebaseAuth.signInWithEmailAndPassword(email, password);
   }
 
-  async signUp(email: string, password: string) {
-    try {
-      const res = await this.firebaseAuth.createUserWithEmailAndPassword(email, password);
-      this.isLoggedIn = true;
-      localStorage.setItem(localStorageKeys.user, JSON.stringify(res.user));
-    } catch {}
+  signUp(email: string, password: string) {
+    return this.firebaseAuth.createUserWithEmailAndPassword(email, password);
   }
 
   logOut() {

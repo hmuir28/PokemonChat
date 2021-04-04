@@ -8,9 +8,9 @@ import {
 } from '@nebular/theme';
 import { Subscription } from 'rxjs';
 
-import { ShowItemComponent } from './show-item/show-item.component';
 import { IPokemonsResponse, PokemonService } from '../../services/pokemon';
 import Pokemon from '../../models/pokemon';
+import { ModalService } from './modal/modal.service';
 
 interface TreeNode<T> {
   data: T;
@@ -37,13 +37,14 @@ export class ItemTableComponent implements OnInit, OnDestroy {
   // TODO: Future implementation for infinite scroll
   next!: string;
 
+  pokemon!: Pokemon;
   pokemonsSubscription!: Subscription;
   sortColumn!: string;
   sortDirection: NbSortDirection;
 
   constructor(
     private dataSourceBuilder: NbTreeGridDataSourceBuilder<Pokemon>,
-    private dialogService: NbDialogService,
+    private modalService: ModalService,
     private pokemonService: PokemonService,
   ) {
     this.customColumn = 'name';
@@ -87,10 +88,8 @@ export class ItemTableComponent implements OnInit, OnDestroy {
   }
 
   selectItem(pokemon: Pokemon) {
-    // Hack implemented due to the DialogService since it didn't pass
-    // the values through the context object parameter.
-    ShowItemComponent.prototype.pokemon = pokemon;
-    this.dialogService.open(ShowItemComponent);
+    this.pokemon = pokemon;
+    this.modalService.open('item-modal');
   }
 
   updateSort(sortRequest: NbSortRequest): void {

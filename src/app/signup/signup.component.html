@@ -1,14 +1,12 @@
-<nb-layout>
-  <nb-layout-column class="container">
-    <nb-card>
-      <nb-card-body>
-        <input type="text" #email nbInput fullWidth fieldSize="small" placeholder="Email">
-        <input type="password" #password nbInput fullWidth fieldSize="small" placeholder="Password">
-        <button nbButton fullWidth (click)="onSignUp(email.value, password.value)">Sign Up</button>
-      </nb-card-body>
-      <nb-card-footer>
-        <a routerLink="/login">Sign In</a>
-      </nb-card-footer>
-    </nb-card>
-  </nb-layout-column>
-</nb-layout>
+<div class="container">
+  <nb-card>
+    <nb-card-body>
+      <input type="text" #email nbInput fullWidth fieldSize="small" placeholder="Email">
+      <input type="password" #password nbInput fullWidth fieldSize="small" placeholder="Password">
+      <button nbButton fullWidth (click)="onSignUp(email.value, password.value)">Sign Up</button>
+    </nb-card-body>
+    <nb-card-footer>
+      <a routerLink="/login">Sign In</a>
+    </nb-card-footer>
+  </nb-card>
+</div>

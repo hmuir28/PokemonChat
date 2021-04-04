@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { localStorageKeys, routes } from '../config/constants';
+import { NbToastrService } from '@nebular/theme';
+import { localStorageKeys, messageStatus, routes } from '../config/constants';
 import { FirebaseService } from '../services/firebase.service';
+
+const { error } = messageStatus;
 
 @Component({
   selector: 'app-login',
@@ -15,6 +18,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private firebaseService: FirebaseService,
     private router: Router,
+    private toastrService: NbToastrService,
   ) { }
 
   ngOnInit(): void {
@@ -25,10 +29,13 @@ export class LoginComponent implements OnInit {
 
   async onSignIn(email: string, password: string) {
     try {
-      await this.firebaseService.signIn(email, password);
-      if (this.firebaseService.isLoggedIn) {
+      const res = await this.firebaseService.signIn(email, password);
+      if (res) {
+        localStorage.setItem(localStorageKeys.user, JSON.stringify(res.user));
         this.router.navigate([routes.pokemons]);
       }
-    } catch {}
+    } catch (e) {
+      this.toastrService.show('Failed to sign in', 'Error', { status: error });
+    }
   }
 }
