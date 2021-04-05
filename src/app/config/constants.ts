@@ -11,4 +11,4 @@ export const routes = {
 export const messageStatus = {
   success: 'success',
   error: 'danger',
-}
+};

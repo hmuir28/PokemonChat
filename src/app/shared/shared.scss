@@ -1,8 +1,7 @@
 :host .container {
   align-items: center;
   display: flex;
-  height: 100vh;
-  padding: 0 30% !important;
+  justify-content: center;
 
   nb-card-body {
     input {

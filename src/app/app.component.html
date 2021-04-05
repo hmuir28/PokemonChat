@@ -5,6 +5,9 @@
   </nb-layout-header>
 
   <nb-layout-column>
+    <div *ngIf="showPokemonLogo()">
+      <h1 class="title">Pokemon</h1>
+    </div>
     <router-outlet></router-outlet>
   </nb-layout-column>
 

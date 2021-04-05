@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { localStorageKeys } from './config/constants';
+import { localStorageKeys, routes } from './config/constants';
 
 @Component({
   selector: 'app-root',
@@ -11,5 +11,10 @@ export class AppComponent {
 
   isLoggedIn() {
     return localStorage.getItem(localStorageKeys.user);
+  }
+
+  showPokemonLogo() {
+    return window.location.pathname.indexOf(routes.login) !== -1 ||
+      window.location.pathname.indexOf(routes.signup) !== -1;
   }
 }
