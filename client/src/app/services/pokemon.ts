@@ -20,8 +20,8 @@ export class PokemonService {
   
   constructor(private http: HttpClient) {}
 
-  getPokemons(url = pokemonsUrl): Observable<IPokemonsResponse> {
-    return this.http.get<IPokemonsResponse>(url);
+  getPokemons(url = pokemonsUrl): Promise<IPokemonsResponse> {
+    return this.http.get<IPokemonsResponse>(url).toPromise();
   }
 
   getPokemon(url: string): Observable<PokemonDetails> {

@@ -4,6 +4,8 @@ import { Subscription } from 'rxjs';
 import { PokemonService } from '../../../services/pokemon';
 import Pokemon from '../../../models/pokemon';
 import PokemonDetails from 'src/app/models/pokemon-details';
+import { WebSocketService } from 'src/app/services/websocket.service';
+import Message from 'src/app/models/message';
 
 @Component({
   selector: 'app-show-item',
@@ -19,8 +21,8 @@ export class ShowItemComponent implements OnChanges, OnDestroy {
   pokemonDetailSubscription!: Subscription;
   
   constructor(
-    private el: ElementRef,
     private pokemonService: PokemonService,
+    private ws: WebSocketService,
     ) {}
 
   ngOnInit(): void {
@@ -34,7 +36,14 @@ export class ShowItemComponent implements OnChanges, OnDestroy {
             this.pokemonDetailSubscription = this.pokemonService.getPokemon(this.pokemon.url)
               .subscribe(({ abilities, sprites }) => {
                 if (!this.pokemonDetails) {
-                  this.pokemonDetails = new PokemonDetails(abilities, sprites);
+                  const { name, url } = this.pokemon;
+                  
+                  this.pokemonDetails = new PokemonDetails(
+                    abilities,
+                    name,
+                    sprites,
+                    url
+                  );
                 } else {
                   this.pokemonDetails.abilities = abilities;
                   this.pokemonDetails.sprites = sprites;
@@ -56,5 +65,10 @@ export class ShowItemComponent implements OnChanges, OnDestroy {
 
   isPropString(obj: any) {
     return typeof obj === 'string';
+  }
+
+  sendPokemon() {
+    const message = new Message(this.pokemonDetails, 'hmuir');
+    this.ws.sendMessage(message);
   }
 }

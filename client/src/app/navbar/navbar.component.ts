@@ -4,6 +4,7 @@ import { NbMenuService } from '@nebular/theme';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FirebaseService } from '../services/firebase.service';
+import { WebSocketService } from '../services/websocket.service';
 
 @Component({
   selector: 'app-navbar',
@@ -23,6 +24,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private firebaseFirebase: FirebaseService,
     private nbMenuService: NbMenuService,
     private router: Router,
+    private ws: WebSocketService,
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +41,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.itemsSubscription.unsubscribe();
+    this.ws.close();
   }
 
   handleLogout() {

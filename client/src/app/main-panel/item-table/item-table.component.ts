@@ -4,13 +4,12 @@ import {
   NbSortRequest,
   NbTreeGridDataSource,
   NbTreeGridDataSourceBuilder,
-  NbDialogService,
 } from '@nebular/theme';
-import { Subscription } from 'rxjs';
 
 import { IPokemonsResponse, PokemonService } from '../../services/pokemon';
 import Pokemon from '../../models/pokemon';
 import { ModalService } from './modal/modal.service';
+import { WebSocketService } from 'src/app/services/websocket.service';
 
 interface TreeNode<T> {
   data: T;
@@ -23,7 +22,7 @@ interface TreeNode<T> {
   templateUrl: './item-table.component.html',
   styleUrls: ['./item-table.component.scss']
 })
-export class ItemTableComponent implements OnInit, OnDestroy {
+export class ItemTableComponent implements OnInit {
   customColumn: string;
   data: TreeNode<Pokemon>[];
   defaultColumns: string[];
@@ -38,7 +37,6 @@ export class ItemTableComponent implements OnInit, OnDestroy {
   next!: string;
 
   pokemon!: Pokemon;
-  pokemonsSubscription!: Subscription;
   sortColumn!: string;
   sortDirection: NbSortDirection;
 
@@ -46,6 +44,7 @@ export class ItemTableComponent implements OnInit, OnDestroy {
     private dataSourceBuilder: NbTreeGridDataSourceBuilder<Pokemon>,
     private modalService: ModalService,
     private pokemonService: PokemonService,
+    private ws: WebSocketService,
   ) {
     this.customColumn = 'name';
     this.defaultColumns = [ 'url' ];
@@ -60,12 +59,7 @@ export class ItemTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.pokemonsSubscription = this.pokemonService.getPokemons()
-      .subscribe(this.handlePokemons.bind(this));
-  }
-
-  ngOnDestroy() {
-    this.pokemonsSubscription.unsubscribe();
+    this.handleOnInit();
   }
 
   getSortDirection(column: string): NbSortDirection {
@@ -79,6 +73,13 @@ export class ItemTableComponent implements OnInit, OnDestroy {
     const minWithForMultipleColumns = 400;
     const nextColumnStep = 100;
     return minWithForMultipleColumns + (nextColumnStep * index);
+  }
+
+  handleOnInit() {
+    // TODO: Add logger to track FE ws issues
+    this.pokemonService.getPokemons()
+      .then(this.handlePokemons.bind(this))
+      .then(() => this.ws.open(() => {}));
   }
 
   handlePokemons({ next, results: pokemons }: IPokemonsResponse) {
