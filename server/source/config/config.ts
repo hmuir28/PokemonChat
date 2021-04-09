@@ -2,12 +2,12 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || 'localhost';
-const SERVER_PORT = process.env.SERVER_PORT || 1337
+const hostname = process.env.SERVER_HOSTNAME || 'localhost';
+const port = process.env.SERVER_PORT || 1337
 
 const server = {
-  hostname: SERVER_HOSTNAME,
-  port: SERVER_PORT,
+  hostname,
+  port,
 };
 
 const config = {
