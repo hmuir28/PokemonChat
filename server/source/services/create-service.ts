@@ -1,4 +1,7 @@
 import mongoose from 'mongoose';
+import HttpResponse from '../models/http-response';
+
+// TODO: Refactor return properties align it with <HttpResponse>
 
 class Service {
   model: any;
@@ -11,7 +14,8 @@ class Service {
     this.delete = this.delete.bind(this);
   }
 
-  async getAll(query: any) {
+  async getAll(query: any): Promise<HttpResponse> {
+    const httpResponse = new HttpResponse();
     let { skip, limit } = query;
 
     skip = skip ? Number(skip) : 0;
@@ -24,93 +28,95 @@ class Service {
       try {
         query._id = new mongoose.mongo.ObjectId(query._id);
       } catch (errors: any) {
-        return {
-          errors,
-          error: true,
-          statusCode: 500,
-        };
+        httpResponse.errors = errors;
+        httpResponse.statusCode = 500;
+
+        return httpResponse;
       }
     }
 
     try {
-      let items = await this.model
+      const items = await this.model
         .find(query)
         .skip(skip)
         .limit(limit);
-      let total = await this.model.count();
+      const total = await this.model.count();
+      httpResponse.total = total;
+      httpResponse.statusCode = 200;
+      httpResponse.response = { items };
 
-      return {
-        total,
-        error: false,
-        statusCode: 200,
-        data: items,
-      };
+      return httpResponse;
     } catch (errors) {
-      return {
-        errors,
-        error: true,
-        statusCode: 500,
-      };
+      httpResponse.errors = errors;
+      httpResponse.statusCode = 500;
+
+      return httpResponse;
     }
   }
 
-  async insert(data: any) {
+  async insert(data: any): Promise<HttpResponse> {
+    const httpResponse = new HttpResponse();
+
     try {
       let item = await this.model.create(data);
-      if (item)
-        return {
-          item,
-          error: false,
-        };
+      if (item) {
+        httpResponse.response = { item };
+        httpResponse.statusCode = 200;
+
+        return httpResponse;
+      }
+
+      throw new Error();
     } catch (error) {
-      return {
-        error: true,
-        statusCode: 500,
-        message: error.errmsg || "Not able to create item",
-        errors: error.errors
+      httpResponse.statusCode = 500;
+      httpResponse.errors = {
+        message: error.errmsg || 'Not able to create item',
       };
+
+      return httpResponse;
     }
   }
 
-  async update(id: String, data: any) {
+  async update(id: String, data: any): Promise<HttpResponse> {
+    const httpResponse = new HttpResponse();
+
     try {
-      let item = await this.model.findByIdAndUpdate(id, data, { new: true });
-      return {
-        item,
-        error: false,
-        statusCode: 202,
-      };
+      const item = await this.model.findByIdAndUpdate(id, data, { new: true });
+      httpResponse.response = { item };
+      httpResponse.statusCode = 202;
+
+      return httpResponse;
     } catch (errors: any) {
-      return {
-        errors,
-        error: true,
-        statusCode: 500,
-      };
+      httpResponse.errors = errors;
+      httpResponse.statusCode = 500;
+
+      return httpResponse;
     }
   }
 
-  async delete(id: String) {
+  async delete(id: String): Promise<HttpResponse> {
+    const httpResponse = new HttpResponse();
+
     try {
-      let item = await this.model.findByIdAndDelete(id);
-      if (!item)
-        return {
-          error: true,
-          message: "item not found",
+      const item = await this.model.findByIdAndDelete(id);
+      if (!item) {
+        httpResponse.errors = {
+          message: 'item not found',
           statusCode: 404,
         };
 
-      return {
-        item,
-        error: false,
-        deleted: true,
-        statusCode: 202,
-      };
+        return httpResponse;
+      }
+
+      httpResponse.response = { item };
+      httpResponse.statusCode = 202;
+
+      return httpResponse;
     } catch (errors) {
-      return {
-        errors,
-        error: true,
-        statusCode: 500,
-      };
+      httpResponse.errors = errors;
+      httpResponse.statusCode = 500;
+
+      return httpResponse;
     }
   }
 }
