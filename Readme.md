@@ -1,6 +1,6 @@
 # Pokemon Chat
 
-Pokemon Chat is a web application which allows users to exchange pokemons, of course, it's an application that I created it just to get back to Angular and Node,
+Pokemon Chat is a web application that allows users to exchange pokemons, of course, it's an application that I created just to get back to Angular, Node and for practicing Typescript, too.
 
 ## Features
 
@@ -22,27 +22,22 @@ And of course Dillinger itself is open source with a [public repository][dill]
 
 ## Installation
 
-Pokemon Chat requires [Node.js](https://nodejs.org/) v10+ to run.
+### Requeriments
+- [Node.js](https://nodejs.org/) v10+ to run
+- Docker and Docker Compose
 
 ### Client
 
-- Install the dependencies and devDependencies and start the server.
-- Install the Angular CLI globally - npm i -g @angular/cli - suggested version 11.2.6)
-
 ```sh
 cd client
-npm i
-npm start | ng serve
+docker-compose build && docker-compose up
 ```
 
 ### Server
 
-- Install the dependencies and devDependencies and start the server.
-
 ```sh
 cd server
-npm i
-npm start
+docker-compose build && docker-compose up
 ```
 
 For production environments...
