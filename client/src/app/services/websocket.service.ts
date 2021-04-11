@@ -12,7 +12,7 @@ export class WebSocketService {
 
   constructor() {
     if (!this.socket) {
-      this.socket = new WebSocket(`${WebSocketConfig.protocol}${WebSocketConfig.hostname}:${WebSocketConfig.port}`);
+      this.socket = new WebSocket(`${WebSocketConfig.via}${WebSocketConfig.hostname}:${WebSocketConfig.port}`);
     }
   }
 
