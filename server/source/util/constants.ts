@@ -1,7 +1,7 @@
 export const mongoConfiguration = {
   connectionConfig: {
     db: 'pokemon-chat',
-    hostname: '0.0.0.0',
+    hostname: 'mongodb',
     port: 27017,
     via: 'mongodb://',
   },

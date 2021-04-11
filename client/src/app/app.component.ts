@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { localStorageKeys, routes } from './config/constants';
+import { localStorageKeys, routes } from './util/constants';
 
 @Component({
   selector: 'app-root',

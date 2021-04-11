@@ -6,7 +6,7 @@ import { LoginComponent } from './login/login.component';
 import { MainPanelComponent } from './main-panel/main-panel.component';
 import { SignupComponent } from './signup/signup.component';
 
-import { routes } from './config/constants';
+import { routes } from './util/constants';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(routes.login);
 

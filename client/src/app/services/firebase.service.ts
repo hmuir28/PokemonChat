@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 
-import { localStorageKeys } from '../config/constants';
+import { localStorageKeys } from '../util/constants';
 
 @Injectable({
   providedIn: 'root'

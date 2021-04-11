@@ -9,6 +9,8 @@ class MongoConfig {
   constructor() {
     const url =
       process.env.MONGODB_URI || mongoUri;
+
+    console.log(url);
     mongoose.Promise = global.Promise;
     mongoose.set(mongoConfiguration.useCreateIndex, true);
     mongoose.set(mongoConfiguration.useFindAndModify, false);

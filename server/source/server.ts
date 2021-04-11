@@ -5,8 +5,11 @@ import http from 'http';
 import logging from './config/logging';
 import WebSocket from 'ws';
 
+import './config/mongodb.config';
+
 const NAMESPACE = 'Server';
 const router = express();
+
 
 router.use((req, res, next) => {
 
@@ -53,7 +56,6 @@ wss.on('connection', function connection(ws) {
 
   ws.on('message', function incoming(message) {
     console.log('message: %s', message);
-    console.log('<<<<<<<<<');
     ws.send(`Got your message: ${message}`);
   });
 });

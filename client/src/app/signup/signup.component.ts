@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
-import { routes, messageStatus, localStorageKeys } from '../config/constants';
+import { routes, messageStatus, localStorageKeys } from '../util/constants';
 import { FirebaseService } from '../services/firebase.service';
 
 const { error } = messageStatus;
