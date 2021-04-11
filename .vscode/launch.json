@@ -7,8 +7,8 @@
             "preLaunchTask": "docker-run: debug",
             "platform": "node",
             "node": {
-                "package": "${workspaceFolder}/server/package.json",
-                "localRoot": "${workspaceFolder}/server"
+                "package": "${workspaceFolder}/client/package.json",
+                "localRoot": "${workspaceFolder}/client"
             }
         }
     ]
