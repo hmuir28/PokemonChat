@@ -8,13 +8,19 @@ class Controller {
 
   constructor(service: Service) {
     this.service = service;
+    this.get = this.get.bind(this);
     this.getAll = this.getAll.bind(this);
     this.insert = this.insert.bind(this);
     this.update = this.update.bind(this);
     this.delete = this.delete.bind(this);
   }
 
+  async get(req: Request, res: Response) {
+    return res.status(200).send(await this.service.get(req.params));
+  }
+
   async getAll(req: Request, res: Response) {
+    // TODO: Do research about "req.query" is not the same as "req.params" for GET requests
     return res.status(200).send(await this.service.getAll(req.query));
   }
 

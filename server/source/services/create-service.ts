@@ -8,10 +8,28 @@ class Service {
 
   constructor(model: any) {
     this.model = model;
+    this.get = this.get.bind(this);
     this.getAll = this.getAll.bind(this);
     this.insert = this.insert.bind(this);
     this.update = this.update.bind(this);
     this.delete = this.delete.bind(this);
+  }
+
+  async get(query: any): Promise<HttpResponse> {
+    const httpResponse = new HttpResponse();
+
+    try {
+      const item = await this.model.findById({ _id: query.id });
+      httpResponse.statusCode = 200;
+      httpResponse.response = { item };
+
+      return httpResponse;
+    } catch (errors) {
+      httpResponse.errors = errors;
+      httpResponse.statusCode = 500;
+
+      return httpResponse;
+    }
   }
 
   async getAll(query: any): Promise<HttpResponse> {
@@ -23,17 +41,6 @@ class Service {
 
     delete query.skip;
     delete query.limit;
-
-    if (query._id) {
-      try {
-        query._id = new mongoose.mongo.ObjectId(query._id);
-      } catch (errors: any) {
-        httpResponse.errors = errors;
-        httpResponse.statusCode = 500;
-
-        return httpResponse;
-      }
-    }
 
     try {
       const items = await this.model

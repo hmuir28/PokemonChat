@@ -1,9 +1,12 @@
 import bodyParser from 'body-parser';
-import config from './config/config';
+import cors from 'cors';
 import express from 'express';
 import http from 'http';
-import logging from './config/logging';
 import WebSocket from 'ws';
+
+import config from './config/config';
+import logging from './config/logging';
+import PokemonRoutes from './routes/pokemon-routes';
 
 import './config/mongodb.config';
 
@@ -12,7 +15,6 @@ const router = express();
 
 
 router.use((req, res, next) => {
-
   logging.info(NAMESPACE, `METHOD - [${req.method}], URL - [${req.url}], IP - [${req.socket.remoteAddress}]`);
   
   res.on('finish', () => {
@@ -24,26 +26,9 @@ router.use((req, res, next) => {
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
+router.use(cors());
 
-router.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-
-  if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 'GET PATCH DELETE POST PUT');
-    return res.status(200).json({});
-  }
-
-  next();
-});
-
-router.use((req, res, next) => {
-  const error = new Error('not found');
-
-  return res.status(404).json({
-    message: error.message,
-  });
-});
+router.use('/pokemons', PokemonRoutes);
 
 const httpServer = http.createServer(router);
 const wss = new WebSocket.Server({ server: httpServer });
@@ -55,7 +40,6 @@ wss.on('connection', function connection(ws) {
   ws.send('Welcome new client')
 
   ws.on('message', function incoming(message) {
-    console.log('message: %s', message);
     ws.send(`Got your message: ${message}`);
   });
 });
