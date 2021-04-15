@@ -1,7 +1,8 @@
-import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
 
 // Custom Angular Files
 import { AppRoutingModule } from './app-routing.module';
@@ -50,6 +51,7 @@ import { ShowItemComponent } from './main-panel/item-table/show-item/show-item.c
     AngularFireModule.initializeApp(FirebaseConfig),
     BrowserModule,
     BrowserAnimationsModule,
+    FormsModule,
     HttpClientModule,
     NbThemeModule.forRoot({ name: 'cosmic' }),
     NbButtonModule,

@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { PokemonService } from '../../../services/pokemon';
+import { PokemonService } from '../../../services/pokemon.service';
 import Pokemon from '../../../models/pokemon';
 import PokemonDetails from 'src/app/models/pokemon-details';
 import { WebSocketService } from 'src/app/services/websocket.service';
@@ -35,20 +35,21 @@ export class ShowItemComponent implements OnChanges, OnDestroy {
           case 'pokemon':
             this.pokemonDetailSubscription = this.pokemonService.getPokemon(this.pokemon.url)
               .subscribe(({ abilities, sprites }) => {
-                if (!this.pokemonDetails) {
-                  const { name, url } = this.pokemon;
-                  
-                  this.pokemonDetails = new PokemonDetails(
-                    abilities,
-                    name,
-                    sprites,
-                    url
-                  );
-                } else {
-                  this.pokemonDetails.abilities = abilities;
-                  this.pokemonDetails.sprites = sprites;
-                }
-              
+                const { name, url } = this.pokemon;
+                const {
+                  displayName,
+                  description,
+                } = this.pokemonDetails;
+
+                this.pokemonDetails = new PokemonDetails(
+                  abilities,
+                  displayName,
+                  description,
+                  name,
+                  sprites,
+                  url
+                );
+
                 this.spritesKeys = Object.keys(this.pokemonDetails.sprites);
               });
             break;
@@ -69,6 +70,5 @@ export class ShowItemComponent implements OnChanges, OnDestroy {
 
   sendPokemon() {
     const message = new Message(this.pokemonDetails, 'hmuir');
-    this.ws.sendMessage(message);
   }
 }
