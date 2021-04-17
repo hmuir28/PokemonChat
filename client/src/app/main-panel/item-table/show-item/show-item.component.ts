@@ -1,11 +1,15 @@
-import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { NbToastrService } from '@nebular/theme';
+import { cloneDeep } from 'lodash';
 import { Subscription } from 'rxjs';
 
+import { localStorageKeys, messageStatus } from '../../../util/constants';
 import { PokemonService } from '../../../services/pokemon.service';
 import Pokemon from '../../../models/pokemon';
-import PokemonDetails from 'src/app/models/pokemon-details';
-import { WebSocketService } from 'src/app/services/websocket.service';
-import Message from 'src/app/models/message';
+import PokemonDetails from '../../../models/pokemon-details';
+import UserPokemon from '../../../models/user-pokemon';
+
+const { success, error } = messageStatus;
 
 @Component({
   selector: 'app-show-item',
@@ -16,14 +20,18 @@ export class ShowItemComponent implements OnChanges, OnDestroy {
   @Input()
   pokemon!: Pokemon;
 
+  modalClose: () => void;
+  selectedSprite?: string;
   spritesKeys: string[] = [];
   pokemonDetails!: PokemonDetails;
   pokemonDetailSubscription!: Subscription;
   
   constructor(
     private pokemonService: PokemonService,
-    private ws: WebSocketService,
-    ) {}
+    private toastrService: NbToastrService,
+    ) {
+      this.modalClose = () => ({});
+    }
 
   ngOnInit(): void {
   }
@@ -36,15 +44,11 @@ export class ShowItemComponent implements OnChanges, OnDestroy {
             this.pokemonDetailSubscription = this.pokemonService.getPokemon(this.pokemon.url)
               .subscribe(({ abilities, sprites }) => {
                 const { name, url } = this.pokemon;
-                const {
-                  displayName,
-                  description,
-                } = this.pokemonDetails;
 
                 this.pokemonDetails = new PokemonDetails(
                   abilities,
-                  displayName,
-                  description,
+                  '',
+                  '',
                   name,
                   sprites,
                   url
@@ -68,7 +72,38 @@ export class ShowItemComponent implements OnChanges, OnDestroy {
     return typeof obj === 'string';
   }
 
-  sendPokemon() {
-    const message = new Message(this.pokemonDetails, 'hmuir');
+  handleSubmit() {
+    const userInfo = localStorage.getItem(localStorageKeys.user);
+
+    if (userInfo && this.selectedSprite) {
+      const { uid } = JSON.parse(userInfo);
+      const clonedPokemon = cloneDeep(this.pokemonDetails);
+
+      clonedPokemon.sprites = {
+        logoUrl: this.pokemonDetails.sprites[this.selectedSprite]
+      };
+      const userPokemon = new UserPokemon(uid, clonedPokemon);
+
+      this.pokemonService.createPokemon(userPokemon)
+        .toPromise()
+        .then(() => {
+          this.toastrService.show('Pokemon submitted!', 'Successful', { status: success });
+          this.modalClose();
+        })
+        .catch(() => {
+          this.toastrService.show('Pokemon cannot be submitted!', 'Fail', { status: error });
+        });
+    } else {
+      // TODO: Replace this toastr with form validation errors below each corresponding field.
+      this.toastrService.show('Please select a sprite for your pokemon.', 'Fail', { status: error });
+    }
+  }
+
+  listenerModalCloseEvent({ modalClose }: any) {
+    this.modalClose = modalClose;
+  }
+
+  selectPokemonSprite(spriteKey: string) {
+    this.selectedSprite = spriteKey;
   }
 }

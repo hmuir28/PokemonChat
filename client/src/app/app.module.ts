@@ -1,18 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-
-// Custom Angular Files
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { MainPanelComponent } from './main-panel/main-panel.component';
-import { ItemTableComponent } from './main-panel/item-table/item-table.component';
-
-import FirebaseConfig from './config/firebase-config';
-
-// Additional Node Modules
 import { AngularFireModule } from '@angular/fire';
 import {
   NbButtonModule,
@@ -29,11 +19,22 @@ import {
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 
+// Custom Angular Files
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
+import { MainPanelComponent } from './main-panel/main-panel.component';
 import { ModalComponent } from './main-panel/item-table/modal/modal.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { ItemTableComponent } from './main-panel/item-table/item-table.component';
 import { SignupComponent } from './signup/signup.component';
 import { ShowItemComponent } from './main-panel/item-table/show-item/show-item.component';
+
+// Custom Configuration Files
+import FirebaseConfig from './config/firebase-config';
+
+// Custom Interceptor Files
+import { CommonInterceptor } from './interceptors/common-interceptor';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,9 @@ import { ShowItemComponent } from './main-panel/item-table/show-item/show-item.c
     NbTreeGridModule,
     NbEvaIconsModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: CommonInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

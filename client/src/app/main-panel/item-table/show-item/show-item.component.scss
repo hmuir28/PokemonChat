@@ -3,7 +3,49 @@ nb-card {
     display: none;
   }
 
-  .images-block {
-    display: flex;
+  .pokemon-images {
+    display: grid;
+  }
+
+  .list-abilities {
+    list-style: none;
+
+    li {
+      margin-bottom: 10px;
+
+      input {
+        width: 100%;
+      }
+    }
+  }
+
+  .main-control {
+    .main-control-row {
+      display: grid;
+      padding: 2% 0;
+
+      input,
+      textarea {
+        margin-top: 10px;
+      }
+    }  
+  }
+
+  .main-control,
+  .secondary-control {
+    input,
+    textarea {
+      width: 100%;
+      max-width: unset;
+    }
+    
+    textarea {
+      resize: none;
+    }
+  }
+
+  nb-card-body {
+    overflow-y: scroll;
+    max-height: 30rem;
   }
 }

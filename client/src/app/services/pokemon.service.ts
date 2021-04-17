@@ -8,6 +8,7 @@ import { defaultServerUrl, pokemonsUrl } from '../config/api';
 import HttpResponse from '../models/http-response';
 import Pokemon from '../models/pokemon';
 import PokemonDetails from '../models/pokemon-details';
+import UserPokemon from '../models/user-pokemon';
 
 export interface IPokemonsResponse {
   next: string,
@@ -21,9 +22,9 @@ export class PokemonService {
   
   constructor(private http: HttpClient) {}
 
-  // createPokemon(url = defaultServerUrl, pokemon): Observable<HttpResponse> {
-  //   return this.http.post<HttpResponse>(url, );
-  // }
+  createPokemon(userPokemon: UserPokemon, url = `${defaultServerUrl}/pokemons`): Observable<HttpResponse> {
+    return this.http.post<HttpResponse>(url, userPokemon);
+  }
 
   getPokemons(url = pokemonsUrl): Promise<IPokemonsResponse> {
     return this.http.get<IPokemonsResponse>(url).toPromise();

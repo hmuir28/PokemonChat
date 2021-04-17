@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   NbSortDirection,
   NbSortRequest,
@@ -6,7 +6,7 @@ import {
   NbTreeGridDataSourceBuilder,
 } from '@nebular/theme';
 
-import { IPokemonsResponse, PokemonService } from '../../services/pokemon';
+import { IPokemonsResponse, PokemonService } from '../../services/pokemon.service';
 import Pokemon from '../../models/pokemon';
 import { ModalService } from './modal/modal.service';
 import { WebSocketService } from 'src/app/services/websocket.service';

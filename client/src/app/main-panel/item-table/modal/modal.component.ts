@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewEncapsulation, ElementRef, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
 
 import { ModalService } from './modal.service';
 
@@ -10,6 +10,9 @@ import { ModalService } from './modal.service';
 })
 export class ModalComponent implements OnInit, OnDestroy {
   @Input() modalId: string = "custom-modal-1";
+
+  @Output()
+  triggerClose = new EventEmitter<any>();
 
   element: any;
 
@@ -27,6 +30,8 @@ export class ModalComponent implements OnInit, OnDestroy {
     });
 
     this.modalService.add(this);
+    const emitObject = { modalClose: this.close.bind(this) };
+    this.triggerClose.emit(emitObject);
   }
 
   ngOnDestroy(): void {

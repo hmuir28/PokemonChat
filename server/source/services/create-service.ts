@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import HttpResponse from '../models/http-response';
+import Pokemon from '../models/pokemon';
 
 // TODO: Refactor return properties align it with <HttpResponse>
 
@@ -65,7 +66,18 @@ class Service {
     const httpResponse = new HttpResponse();
 
     try {
-      let item = await this.model.create(data);
+      const { uid, pokemonDetails } = data;
+
+      let item = await this.model.create({
+        uid,
+        abilities: pokemonDetails.abilities,
+        displayName: pokemonDetails.displayName,
+        description: pokemonDetails.description,
+        logoUrl: pokemonDetails.sprites.logoUrl,
+        moreDetailUrl: pokemonDetails.url,
+        name: pokemonDetails.name,
+      });
+
       if (item) {
         httpResponse.response = { item };
         httpResponse.statusCode = 200;
