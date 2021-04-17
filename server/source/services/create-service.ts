@@ -1,9 +1,6 @@
-import mongoose from 'mongoose';
 import HttpResponse from '../models/http-response';
-import Pokemon from '../models/pokemon';
 
 // TODO: Refactor return properties align it with <HttpResponse>
-
 class Service {
   model: any;
 

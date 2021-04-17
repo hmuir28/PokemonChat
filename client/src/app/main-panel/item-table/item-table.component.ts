@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import {
   NbSortDirection,
   NbSortRequest,
@@ -6,7 +6,6 @@ import {
   NbTreeGridDataSourceBuilder,
 } from '@nebular/theme';
 
-import { IPokemonsResponse, PokemonService } from '../../services/pokemon.service';
 import Pokemon from '../../models/pokemon';
 import { ModalService } from './modal/modal.service';
 import { WebSocketService } from 'src/app/services/websocket.service';
@@ -22,8 +21,14 @@ interface TreeNode<T> {
   templateUrl: './item-table.component.html',
   styleUrls: ['./item-table.component.scss']
 })
-export class ItemTableComponent implements OnInit {
-  customColumn: string;
+export class ItemTableComponent implements OnChanges {
+  @Input()
+  isPokemonListCustom?: boolean;
+  
+  @Input()
+  pokemons: Pokemon[] = [];
+
+  customColumn: string = '';
   data: TreeNode<Pokemon>[];
   defaultColumns: string[];
 
@@ -43,14 +48,10 @@ export class ItemTableComponent implements OnInit {
   constructor(
     private dataSourceBuilder: NbTreeGridDataSourceBuilder<Pokemon>,
     private modalService: ModalService,
-    private pokemonService: PokemonService,
     private ws: WebSocketService,
   ) {
-    this.customColumn = 'name';
-    this.defaultColumns = [ 'url' ];
+    this.defaultColumns = [];
     
-    this.allColumns = [ this.customColumn, ...this.defaultColumns ];
-
     this.loading = false;
 
     this.data = [];
@@ -58,8 +59,12 @@ export class ItemTableComponent implements OnInit {
     this.sortDirection = NbSortDirection.NONE;
   }
 
-  ngOnInit() {
-    this.handleOnInit();
+  ngOnChanges(changes: SimpleChanges) {
+    for (const change in changes) {
+      if (changes.hasOwnProperty(change) && changes[change].currentValue) {
+        this.handlePokemonListChanges();
+      }
+    }
   }
 
   getSortDirection(column: string): NbSortDirection {
@@ -75,22 +80,29 @@ export class ItemTableComponent implements OnInit {
     return minWithForMultipleColumns + (nextColumnStep * index);
   }
 
-  handleOnInit() {
-    // TODO: Add logger to track FE ws issues
-    this.pokemonService.getPokemons()
-      .then(this.handlePokemons.bind(this))
-      .then(() => this.ws.open(() => {}));
-  }
-
-  handlePokemons({ next, results: pokemons }: IPokemonsResponse) {
-    this.next = next;
-    this.data = pokemons.map((pokemon: any) => ({ data: { ...pokemon } }));
+  handlePokemonListChanges() {
+    /* @todo add <this.next = next;> when the virtual scroll is added. */
+    this.setColumnsHeader();
+    this.data = this.pokemons.map((pokemon: any) => ({ data: { ...pokemon } }));
     this.dataSource.setData(this.data);
+    // @todo move the websockets connection out of this method <this.ws.open(() => {})>
   }
 
   selectItem(pokemon: Pokemon) {
     this.pokemon = pokemon;
     this.modalService.open('item-modal');
+  }
+
+  setColumnsHeader() {
+    if (this.isPokemonListCustom) {
+      this.customColumn = 'displayName';
+      this.defaultColumns = ['moreDetailUrl'];
+    } else {
+      this.customColumn = 'name';
+      this.defaultColumns = ['url'];
+    }
+
+    this.allColumns = [this.customColumn, ...this.defaultColumns];
   }
 
   updateSort(sortRequest: NbSortRequest): void {
