@@ -1,28 +1,28 @@
 <jw-modal (triggerClose)="listenerModalCloseEvent($event)" modalId="item-modal">
-  <nb-card *ngIf="pokemonDetails" class="card">
-    <nb-card-header>{{ pokemon.name }}</nb-card-header>
+  <nb-card class="card">
+    <nb-card-header>{{ pokemonDetails ? 'existe' : 'no existe perro...' }}</nb-card-header>
     <nb-card-body>
       <div class="main-control">
         <div class="main-control-row">
           <span class="simple">Display Name: </span>
-          <input nbInput type="text" [(ngModel)]="pokemonDetails.displayName">
+          <!-- <input nbInput type="text" [(ngModel)]="pokemonDetails.displayName"> -->
         </div>
         <div class="main-control-row">
           <span class="simple">Description: </span>
-          <textarea nbInput [(ngModel)]="pokemonDetails.description" cols="30" rows="10"></textarea>
+          <!-- <textarea nbInput [(ngModel)]="pokemonDetails.description" cols="30" rows="10"></textarea> -->
         </div>
         <div class="main-control-row">
           <span class="simple">Images: </span>
           <div class="pokemon-images">
             <div *ngFor="let spriteKey of spritesKeys">
-              <button
+              <!-- <button
                 outline
                 nbButton
                 *ngIf="pokemonDetails.sprites[spriteKey] && isPropString(pokemonDetails.sprites[spriteKey])"
                 (click)="selectPokemonSprite(spriteKey)"
               >
                 <img [src]="pokemonDetails.sprites[spriteKey]" width="100" height="100" />
-              </button>
+              </button> -->
             </div>
           </div>
         </div>
@@ -34,9 +34,9 @@
           </div>
           <div class="block-col">
             <ul class="list-abilities">
-              <li *ngFor="let item of pokemonDetails.abilities">
+              <!-- <li *ngFor="let item of pokemonDetails.abilities">
                 <input nbInput type="text" [(ngModel)]="item.ability.name" />
-              </li>
+              </li> -->
             </ul>
           </div>
         </div>

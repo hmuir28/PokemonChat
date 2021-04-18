@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import {
   NbSortDirection,
   NbSortRequest,
@@ -8,7 +8,9 @@ import {
 
 import Pokemon from '../../models/pokemon';
 import { ModalService } from './modal/modal.service';
-import { WebSocketService } from 'src/app/services/websocket.service';
+import { WebSocketService } from '../../services/websocket.service';
+import CustomPokemon from '../../models/custom-pokemon';
+import { PokemonService } from '../../services/pokemon.service';
 
 interface TreeNode<T> {
   data: T;
@@ -28,24 +30,24 @@ export class ItemTableComponent implements OnChanges {
   @Input()
   pokemons: Pokemon[] = [];
 
+  allColumns: any;
   customColumn: string = '';
   data: TreeNode<Pokemon>[];
-  defaultColumns: string[];
-
-  allColumns: any;
-
   dataSource: NbTreeGridDataSource<Pokemon>;
+  defaultColumns: string[];
+  dummy: string = 'papu';
 
   loading: boolean;
 
   // TODO: Future implementation for infinite scroll
-  next!: string;
+  next?: string;
 
-  pokemon!: Pokemon;
+  pokemon?: Pokemon & CustomPokemon;
   sortColumn!: string;
   sortDirection: NbSortDirection;
 
   constructor(
+    private changesDetectorRef: ChangeDetectorRef,
     private dataSourceBuilder: NbTreeGridDataSourceBuilder<Pokemon>,
     private modalService: ModalService,
     private ws: WebSocketService,
@@ -81,16 +83,17 @@ export class ItemTableComponent implements OnChanges {
   }
 
   handlePokemonListChanges() {
-    /* @todo add <this.next = next;> when the virtual scroll is added. */
+    // @todo add <this.next = next;> when the virtual scroll is added.
     this.setColumnsHeader();
     this.data = this.pokemons.map((pokemon: any) => ({ data: { ...pokemon } }));
     this.dataSource.setData(this.data);
     // @todo move the websockets connection out of this method <this.ws.open(() => {})>
   }
 
-  selectItem(pokemon: Pokemon) {
+  selectItem(pokemon: Pokemon & CustomPokemon) {
     this.pokemon = pokemon;
     this.modalService.open('item-modal');
+    this.changesDetectorRef.detectChanges();
   }
 
   setColumnsHeader() {

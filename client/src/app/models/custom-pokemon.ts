@@ -1,25 +1,29 @@
 import Ability from './interfaces/ability';
-import Sprite from './interfaces/sprite';
-import Pokemon from "./pokemon";
 
-export default class PokemonDetails extends Pokemon {
+export default class CustomPokemon {
   abilities: Array<Ability>;
   displayName: string;
   description: string;
-  sprites: Sprite;
+  logoUrl: string;
+  moreDetailUrl: string;
+  name: string;
+  uid: string;
 
   constructor(
     abilities: Array<Ability>,
     displayName: string,
     description: string,
+    logoUrl: string,
+    moreDetailUrl: string,
     name: string,
-    sprites: Sprite,
-    url: string,
+    uid: string,
   ) {
-    super(name, url);
     this.abilities = abilities;
     this.displayName = displayName;
     this.description = description;
-    this.sprites = sprites;
+    this.logoUrl = logoUrl;
+    this.moreDetailUrl = moreDetailUrl;
+    this.name = name;
+    this.uid = uid;
   }
 }

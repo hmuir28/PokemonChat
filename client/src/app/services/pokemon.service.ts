@@ -19,7 +19,7 @@ export interface IPokemonsResponse {
   providedIn: 'root'
 })
 export class PokemonService {
-  
+
   constructor(private http: HttpClient) {}
 
   createPokemon(userPokemon: UserPokemon, url = serverUrl): Observable<HttpResponse> {

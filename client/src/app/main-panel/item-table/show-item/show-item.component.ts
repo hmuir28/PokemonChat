@@ -1,10 +1,11 @@
-import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
 import { cloneDeep } from 'lodash';
 import { Subscription } from 'rxjs';
 
 import { localStorageKeys, messageStatus } from '../../../util/constants';
 import { PokemonService } from '../../../services/pokemon.service';
+import CustomPokemon from 'src/app/models/custom-pokemon';
 import Pokemon from '../../../models/pokemon';
 import PokemonDetails from '../../../models/pokemon-details';
 import UserPokemon from '../../../models/user-pokemon';
@@ -14,51 +15,51 @@ const { success, error } = messageStatus;
 @Component({
   selector: 'app-show-item',
   templateUrl: './show-item.component.html',
-  styleUrls: ['./show-item.component.scss']
+  styleUrls: ['./show-item.component.scss'],
 })
-export class ShowItemComponent implements OnChanges, OnDestroy {
+export class ShowItemComponent implements OnInit, OnDestroy {
   @Input()
-  pokemon!: Pokemon;
+  isPokemonListCustom?: boolean;
 
-  modalClose: () => void;
+  @Input()
+  pokemon?: Pokemon & CustomPokemon;
+
+  modalClose: () => void = () => ({});
   selectedSprite?: string;
   spritesKeys: string[] = [];
-  pokemonDetails!: PokemonDetails;
-  pokemonDetailSubscription!: Subscription;
+  pokemonDetails?: PokemonDetails;
+  pokemonDetailSubscription?: Subscription;
   
   constructor(
     private pokemonService: PokemonService,
     private toastrService: NbToastrService,
-    ) {
-      this.modalClose = () => ({});
-    }
-
-  ngOnInit(): void {
+  ) {
   }
 
-  ngOnChanges(simpleChanges: SimpleChanges): void {
-    for (const change in simpleChanges) {
-      if (simpleChanges.hasOwnProperty(change) && simpleChanges[change].currentValue) {
-        switch(change) {
-          case 'pokemon':
-            this.pokemonDetailSubscription = this.pokemonService.getPokemon(this.pokemon.url)
-              .subscribe(({ abilities, sprites }) => {
-                const { name, url } = this.pokemon;
+  ngOnInit() {
+    if (!this.pokemon) return;
 
-                this.pokemonDetails = new PokemonDetails(
-                  abilities,
-                  '',
-                  '',
-                  name,
-                  sprites,
-                  url
-                );
+    const { name } = this.pokemon;
 
-                this.spritesKeys = Object.keys(this.pokemonDetails.sprites);
-              });
-            break;
-        }
-      }
+    if (!this.isPokemonListCustom) {
+      const { url } = this.pokemon;
+      this.pokemonDetailSubscription = this.pokemonService.getPokemon(url)
+        .subscribe(({ abilities, sprites }) => {
+          this.pokemonDetails = new PokemonDetails(abilities, '', '', name, sprites, url);
+          this.spritesKeys = Object.keys(this.pokemonDetails.sprites);
+        });
+    } else {
+      const {
+        abilities,
+        displayName,
+        description,
+        logoUrl,
+        moreDetailUrl,
+      } = this.pokemon;
+
+      const sprite = { logoUrl };
+      this.pokemonDetails = new PokemonDetails(abilities, displayName, description, name, sprite, moreDetailUrl);
+      this.spritesKeys = Object.keys(this.pokemonDetails.sprites);
     }
   }
 
@@ -75,13 +76,11 @@ export class ShowItemComponent implements OnChanges, OnDestroy {
   handleSubmit() {
     const userInfo = localStorage.getItem(localStorageKeys.user);
 
-    if (userInfo && this.selectedSprite) {
+    if (userInfo && this.selectedSprite && this.pokemonDetails) {
       const { uid } = JSON.parse(userInfo);
       const clonedPokemon = cloneDeep(this.pokemonDetails);
 
-      clonedPokemon.sprites = {
-        logoUrl: this.pokemonDetails.sprites[this.selectedSprite]
-      };
+      clonedPokemon.sprites = { logoUrl: this.pokemonDetails.sprites[this.selectedSprite] };
       const userPokemon = new UserPokemon(uid, clonedPokemon);
 
       this.pokemonService.createPokemon(userPokemon)
