@@ -6,11 +6,11 @@ import {
   NbTreeGridDataSourceBuilder,
 } from '@nebular/theme';
 
-import Pokemon from '../../models/pokemon';
+import Pokemon from '../../../models/pokemon';
 import { ModalService } from './modal/modal.service';
-import { WebSocketService } from '../../services/websocket.service';
-import CustomPokemon from '../../models/custom-pokemon';
-import { PokemonService } from '../../services/pokemon.service';
+import { WebSocketService } from '../../../services/websocket.service';
+import { PokemonService } from '../../../services/pokemon.service';
+import PokemonDetails from '../../../models/pokemon-details';
 
 interface TreeNode<T> {
   data: T;
@@ -42,7 +42,7 @@ export class ItemTableComponent implements OnChanges {
   // TODO: Future implementation for infinite scroll
   next?: string;
 
-  pokemon?: Pokemon & CustomPokemon;
+  pokemon?: PokemonDetails;
   sortColumn!: string;
   sortDirection: NbSortDirection;
 
@@ -90,7 +90,7 @@ export class ItemTableComponent implements OnChanges {
     // @todo move the websockets connection out of this method <this.ws.open(() => {})>
   }
 
-  selectItem(pokemon: Pokemon & CustomPokemon) {
+  selectItem(pokemon: PokemonDetails) {
     this.pokemon = pokemon;
     this.modalService.open('item-modal');
     this.changesDetectorRef.detectChanges();

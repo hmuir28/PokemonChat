@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 import { LoginComponent } from './login/login.component';
-import { MainPanelComponent } from './main-panel/main-panel.component';
+import { MainPanelComponent } from './pokemons/main-panel/main-panel.component';
 import { SignupComponent } from './signup/signup.component';
 
 import { routes } from './util/constants';
@@ -14,11 +14,6 @@ const angularRoutes: Routes = [
   {
     path: routes.login,
     component: LoginComponent,
-  },
-  {
-    ...canActivate(redirectUnauthorizedToLogin),
-    path: routes.pokemons,
-    component: MainPanelComponent,
   },
   {
     path: routes.signup,

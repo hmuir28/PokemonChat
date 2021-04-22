@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import Pokemon from '../models/pokemon';
-import { IPokemonsResponse, PokemonService } from '../services/pokemon.service';
+import Pokemon from '../../models/pokemon';
+import { IPokemonsResponse, PokemonService } from '../../services/pokemon.service';
 
-import { localStorageKeys, pokemonTabs } from '../util/constants';
+import { localStorageKeys, pokemonTabs } from '../../util/constants';
 
 @Component({
   selector: 'app-main-panel',

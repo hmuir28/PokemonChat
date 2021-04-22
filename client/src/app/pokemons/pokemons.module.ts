@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import {
@@ -21,31 +21,23 @@ import {
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 
 // Custom Angular Files
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { SignupComponent } from './signup/signup.component';
+import { PokemonsRoutingModule } from './pokemons-routing.module';
+import { MainPanelComponent } from './main-panel/main-panel.component';
+import { ModalComponent } from './main-panel/item-table/modal/modal.component';
+import { ItemTableComponent } from './main-panel/item-table/item-table.component';
+import { ShowItemComponent } from './main-panel/item-table/show-item/show-item.component';
 
 // Custom Configuration Files
-import FirebaseConfig from './config/firebase-config';
-
-// Custom Interceptor Files
-import { CommonInterceptor } from './interceptors/common-interceptor';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    LoginComponent,
-    SignupComponent,
-    NavbarComponent,
+    MainPanelComponent,
+    ModalComponent,
+    ItemTableComponent,
+    ShowItemComponent,
   ],
   imports: [
-    AppRoutingModule,
-    AngularFireModule.initializeApp(FirebaseConfig),
-    BrowserModule,
-    BrowserAnimationsModule,
-    FormsModule,
+    PokemonsRoutingModule,
     HttpClientModule,
     NbThemeModule.forRoot({ name: 'cosmic' }),
     NbButtonModule,
@@ -60,9 +52,5 @@ import { CommonInterceptor } from './interceptors/common-interceptor';
     NbTreeGridModule,
     NbEvaIconsModule,
   ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: CommonInterceptor, multi: true }
-  ],
-  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class PokemonsModule { }

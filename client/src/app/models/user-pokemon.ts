@@ -1,14 +1,6 @@
 import PokemonDetails from './pokemon-details';
 
-export default class UserPokemon {
+export default interface UserPokemon {
   uid: string;
   pokemonDetails: PokemonDetails;
-
-  constructor(
-    uid: string,
-    pokemonDetails: PokemonDetails,
-  ) {
-    this.uid = uid;
-    this.pokemonDetails = pokemonDetails;
-  }
 }

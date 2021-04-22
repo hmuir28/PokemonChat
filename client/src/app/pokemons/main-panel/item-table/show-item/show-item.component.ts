@@ -3,12 +3,11 @@ import { NbToastrService } from '@nebular/theme';
 import { cloneDeep } from 'lodash';
 import { Subscription } from 'rxjs';
 
-import { localStorageKeys, messageStatus } from '../../../util/constants';
-import { PokemonService } from '../../../services/pokemon.service';
-import CustomPokemon from 'src/app/models/custom-pokemon';
-import Pokemon from '../../../models/pokemon';
-import PokemonDetails from '../../../models/pokemon-details';
-import UserPokemon from '../../../models/user-pokemon';
+import { localStorageKeys, messageStatus } from '../../../../util/constants';
+import { PokemonService } from '../../../../services/pokemon.service';
+import Pokemon from '../../../../models/pokemon';
+import PokemonDetails from '../../../../models/pokemon-details';
+import UserPokemon from '../../../../models/user-pokemon';
 
 const { success, error } = messageStatus;
 
@@ -22,12 +21,12 @@ export class ShowItemComponent implements OnInit, OnDestroy {
   isPokemonListCustom?: boolean;
 
   @Input()
-  pokemon?: Pokemon & CustomPokemon;
+  pokemon?: Pokemon & PokemonDetails;
 
   modalClose: () => void = () => ({});
+  selectedPokemon: PokemonDetails = {};
   selectedSprite?: string;
   spritesKeys: string[] = [];
-  pokemonDetails?: PokemonDetails;
   pokemonDetailSubscription?: Subscription;
   
   constructor(
@@ -42,24 +41,18 @@ export class ShowItemComponent implements OnInit, OnDestroy {
     const { name } = this.pokemon;
 
     if (!this.isPokemonListCustom) {
-      const { url } = this.pokemon;
-      this.pokemonDetailSubscription = this.pokemonService.getPokemon(url)
+      const { moreDetailUrl } = this.pokemon;
+      this.pokemonDetailSubscription = this.pokemonService.getPokemon(moreDetailUrl)
         .subscribe(({ abilities, sprites }) => {
-          this.pokemonDetails = new PokemonDetails(abilities, '', '', name, sprites, url);
-          this.spritesKeys = Object.keys(this.pokemonDetails.sprites);
+          this.selectedPokemon.abilities = abilities;
+          this.selectedPokemon.name = name;
+          this.selectedPokemon.sprites = sprites;
+          this.selectedPokemon.moreDetailUrl = moreDetailUrl;
+          this.spritesKeys = Object.keys(this.selectedPokemon.sprites);
         });
     } else {
-      const {
-        abilities,
-        displayName,
-        description,
-        logoUrl,
-        moreDetailUrl,
-      } = this.pokemon;
-
-      const sprite = { logoUrl };
-      this.pokemonDetails = new PokemonDetails(abilities, displayName, description, name, sprite, moreDetailUrl);
-      this.spritesKeys = Object.keys(this.pokemonDetails.sprites);
+      this.selectedPokemon = cloneDeep(this.pokemon);
+      this.spritesKeys = Object.keys(this.selectedPokemon.sprites);
     }
   }
 

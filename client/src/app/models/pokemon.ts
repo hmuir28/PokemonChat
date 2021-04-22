@@ -1,9 +1,4 @@
-export default class Pokemon {
+export default interface Pokemon {
   name: string;
-  url: string;
-
-  constructor(name: string, url: string) {
-    this.name = name;
-    this.url = url;
-  }
-}
+  moreDetailUrl: string;
+};
