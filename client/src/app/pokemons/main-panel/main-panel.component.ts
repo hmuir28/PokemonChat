@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable, of } from 'rxjs';
+
 import Pokemon from '../../models/pokemon';
+import PokemonDetails from '../../models/pokemon-details';
+import { ModalService } from './item-table/modal/modal.service';
 import { IPokemonsResponse, PokemonService } from '../../services/pokemon.service';
 
 import { localStorageKeys, pokemonTabs } from '../../util/constants';
@@ -13,8 +17,10 @@ export class MainPanelComponent implements OnInit {
 
   isPokemonListCustom: boolean = false;
   pokemons: Pokemon[] = [];
+  pokemon$?: Observable<PokemonDetails>;
 
   constructor(
+    private modalService: ModalService,
     private pokemonService: PokemonService,
   ) { }
 
@@ -37,6 +43,11 @@ export class MainPanelComponent implements OnInit {
   handleOfficialPokemonsList() {
     return this.pokemonService.getPokemons()
       .then(({ results: pokemons }: IPokemonsResponse) => this.pokemons = pokemons);
+  }
+
+  pokemonSelectionListener(pokemon: PokemonDetails) {
+    this.pokemon$ = of(pokemon);
+    this.modalService.open('item-modal');
   }
 
   selectTab({ tabTitle }: any): void {

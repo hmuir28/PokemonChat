@@ -37,7 +37,7 @@ export class WebSocketService {
   sendMessage(msg: string | Message) {
     if (!this.socket) return;
 
-    if (msg instanceof Message) {
+    if (typeof msg !== 'string') {
       this.socket.send(JSON.stringify(msg));
       return;
     }

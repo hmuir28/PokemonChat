@@ -3,7 +3,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { AngularFireModule } from '@angular/fire';
 import {
   NbButtonModule,
   NbCardModule,
@@ -37,6 +36,9 @@ import { ShowItemComponent } from './main-panel/item-table/show-item/show-item.c
     ShowItemComponent,
   ],
   imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
     PokemonsRoutingModule,
     HttpClientModule,
     NbThemeModule.forRoot({ name: 'cosmic' }),

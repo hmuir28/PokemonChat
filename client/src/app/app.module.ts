@@ -20,6 +20,8 @@ import {
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 
+import { PokemonsModule } from './pokemons/pokemons.module';
+
 // Custom Angular Files
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -59,6 +61,7 @@ import { CommonInterceptor } from './interceptors/common-interceptor';
     NbToastrModule.forRoot({ position: NbGlobalPhysicalPosition.TOP_RIGHT }),
     NbTreeGridModule,
     NbEvaIconsModule,
+    PokemonsModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: CommonInterceptor, multi: true }

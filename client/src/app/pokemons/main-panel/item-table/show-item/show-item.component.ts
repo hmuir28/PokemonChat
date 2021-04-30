@@ -1,11 +1,10 @@
-import { Component, Input, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
+import { Component, Input, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
 import { cloneDeep } from 'lodash';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { localStorageKeys, messageStatus } from '../../../../util/constants';
 import { PokemonService } from '../../../../services/pokemon.service';
-import Pokemon from '../../../../models/pokemon';
 import PokemonDetails from '../../../../models/pokemon-details';
 import UserPokemon from '../../../../models/user-pokemon';
 
@@ -16,15 +15,32 @@ const { success, error } = messageStatus;
   templateUrl: './show-item.component.html',
   styleUrls: ['./show-item.component.scss'],
 })
-export class ShowItemComponent implements OnInit, OnDestroy {
+export class ShowItemComponent implements OnChanges, OnDestroy {
   @Input()
   isPokemonListCustom?: boolean;
 
   @Input()
-  pokemon?: Pokemon & PokemonDetails;
+  pokemon: PokemonDetails | null = {
+    abilities: [],
+    description: '',
+    displayName: '',
+    logoUrl: '',
+    moreDetailUrl: '',
+    name: '',
+    sprites: {},
+  };
 
   modalClose: () => void = () => ({});
-  selectedPokemon: PokemonDetails = {};
+  selectedPokemon: PokemonDetails = {
+    abilities: [],
+    description: '',
+    displayName: '',
+    logoUrl: '',
+    moreDetailUrl: '',
+    name: '',
+    sprites: {},
+  };
+
   selectedSprite?: string;
   spritesKeys: string[] = [];
   pokemonDetailSubscription?: Subscription;
@@ -35,24 +51,40 @@ export class ShowItemComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  ngOnInit() {
-    if (!this.pokemon) return;
+  ngOnChanges(changes: SimpleChanges) {
+    for (const change in changes) {
+      if (changes.hasOwnProperty(change) && changes[change].currentValue) {
+        switch(change) {
+          case 'pokemon':
 
-    const { name } = this.pokemon;
+            if (!this.pokemon) {
+              return;
+            }
 
-    if (!this.isPokemonListCustom) {
-      const { moreDetailUrl } = this.pokemon;
-      this.pokemonDetailSubscription = this.pokemonService.getPokemon(moreDetailUrl)
-        .subscribe(({ abilities, sprites }) => {
-          this.selectedPokemon.abilities = abilities;
-          this.selectedPokemon.name = name;
-          this.selectedPokemon.sprites = sprites;
-          this.selectedPokemon.moreDetailUrl = moreDetailUrl;
-          this.spritesKeys = Object.keys(this.selectedPokemon.sprites);
-        });
-    } else {
-      this.selectedPokemon = cloneDeep(this.pokemon);
-      this.spritesKeys = Object.keys(this.selectedPokemon.sprites);
+            const { name } = this.pokemon;
+
+            if (!this.isPokemonListCustom) {
+              const { moreDetailUrl } = this.pokemon;
+              this.pokemonDetailSubscription = this.pokemonService
+                .getPokemon(moreDetailUrl)
+                .subscribe(({ abilities, sprites }) => {
+                  this.selectedPokemon = {
+                    abilities,
+                    name,
+                    sprites,
+                    moreDetailUrl,
+                  } as PokemonDetails;
+                  this.spritesKeys = Object.keys(this.selectedPokemon.sprites);
+                });
+            } else {
+              this.selectedPokemon = {
+                ...this.pokemon,
+              };
+            }
+
+            break;
+        }
+      }
     }
   }
 
@@ -69,12 +101,15 @@ export class ShowItemComponent implements OnInit, OnDestroy {
   handleSubmit() {
     const userInfo = localStorage.getItem(localStorageKeys.user);
 
-    if (userInfo && this.selectedSprite && this.pokemonDetails) {
+    if (userInfo && this.selectedSprite && this.selectedPokemon) {
       const { uid } = JSON.parse(userInfo);
-      const clonedPokemon = cloneDeep(this.pokemonDetails);
+      const clonedPokemon = cloneDeep(this.selectedPokemon);
 
-      clonedPokemon.sprites = { logoUrl: this.pokemonDetails.sprites[this.selectedSprite] };
-      const userPokemon = new UserPokemon(uid, clonedPokemon);
+      clonedPokemon.sprites = { logoUrl: this.selectedPokemon.sprites[this.selectedSprite] };
+      const userPokemon: UserPokemon = {
+        uid,
+        pokemonDetails: clonedPokemon,
+      };
 
       this.pokemonService.createPokemon(userPokemon)
         .toPromise()

@@ -1,14 +1,21 @@
 <nb-tabset (changeTab)="selectTab($event)">
 <nb-tab tabTitle="All Pokemons List">
   <app-item-table
+    (pokemonSelectionEvent)="pokemonSelectionListener($event)"
     [isPokemonListCustom]="isPokemonListCustom"
     [pokemons]="pokemons"
   ></app-item-table>
 </nb-tab>
 <nb-tab tabTitle="My Custom Pokemons List">
-  <app-item-table 
+  <app-item-table
+    (pokemonSelectionEvent)="pokemonSelectionListener($event)"
     [isPokemonListCustom]="isPokemonListCustom"
     [pokemons]="pokemons"
   ></app-item-table>
 </nb-tab>
 </nb-tabset>
+
+<app-show-item
+  [isPokemonListCustom]="isPokemonListCustom"
+  [pokemon]="(pokemon$ | async)"
+></app-show-item>
