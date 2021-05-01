@@ -97,7 +97,17 @@ class Service {
     const httpResponse = new HttpResponse();
 
     try {
-      const item = await this.model.findByIdAndUpdate(id, data, { new: true });
+      const { uid, pokemonDetails } = data;
+      const item = await this.model
+        .findByIdAndUpdate({ _id: id }, {
+          $set: {
+            uid,
+            ...pokemonDetails,
+          },
+        }, {
+          new: true,
+        });
+      
       httpResponse.response = { item };
       httpResponse.statusCode = 202;
 

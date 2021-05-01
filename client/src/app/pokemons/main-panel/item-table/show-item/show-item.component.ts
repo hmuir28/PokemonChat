@@ -22,6 +22,7 @@ export class ShowItemComponent implements OnChanges, OnDestroy, OnInit {
 
   @Input()
   pokemon: PokemonDetails | null = {
+    _id: '',
     abilities: [],
     description: '',
     displayName: '',
@@ -34,6 +35,7 @@ export class ShowItemComponent implements OnChanges, OnDestroy, OnInit {
   btnText: string = 'Submit';
   modalClose: () => void = () => ({});
   selectedPokemon: PokemonDetails = {
+    _id: '',
     abilities: [],
     description: '',
     displayName: '',
@@ -79,6 +81,7 @@ export class ShowItemComponent implements OnChanges, OnDestroy, OnInit {
                     name,
                     sprites,
                     moreDetailUrl,
+                    _id: '',
                   } as PokemonDetails;
                   this.spritesKeys = Object.keys(this.selectedPokemon.sprites);
                 });
@@ -108,6 +111,11 @@ export class ShowItemComponent implements OnChanges, OnDestroy, OnInit {
     return typeof obj === 'string';
   }
 
+  handleToastrPokemon(msg: string, title: string, status: { [key: string]: string }, modalClose: Function = () => {}) {
+    this.toastrService.show(msg, title, status);
+    modalClose();
+  }
+
   handleSubmit() {
     const userInfo = localStorage.getItem(localStorageKeys.user);
 
@@ -123,13 +131,31 @@ export class ShowItemComponent implements OnChanges, OnDestroy, OnInit {
 
       this.pokemonService.createPokemon(userPokemon)
         .toPromise()
-        .then(() => {
-          this.toastrService.show('Pokemon submitted!', 'Successful', { status: success });
-          this.modalClose();
-        })
-        .catch(() => {
-          this.toastrService.show('Pokemon cannot be submitted!', 'Fail', { status: error });
-        });
+        .then(() => this.handleToastrPokemon('The pokemon was submitted!', 'Successful', { status: success }, this.modalClose))
+        .catch(() => this.handleToastrPokemon('The pokemon cannot be submitted!', 'Fail', { status: error }));
+    } else {
+      // TODO: Replace this toastr with form validation errors below each corresponding field.
+      this.toastrService.show('Please select a sprite for your pokemon.', 'Fail', { status: error });
+    }
+  }
+
+  handleUpdate() {
+    const userInfo = localStorage.getItem(localStorageKeys.user);
+
+    // TODO: Implement feature to update sprites
+    if (userInfo && this.selectedPokemon) {
+      const { uid } = JSON.parse(userInfo);
+      const clonedPokemon = cloneDeep(this.selectedPokemon);
+
+      const userPokemon: UserPokemon = {
+        uid,
+        pokemonDetails: clonedPokemon,
+      };
+
+      this.pokemonService.updatePokemon(clonedPokemon._id, userPokemon)
+        .toPromise()
+        .then(() => this.handleToastrPokemon('The pokemon was updated!', 'Successful', { status: success }, this.modalClose))
+        .catch(() => this.handleToastrPokemon('The pokemon cannot be updated!', 'Fail', { status: error }));
     } else {
       // TODO: Replace this toastr with form validation errors below each corresponding field.
       this.toastrService.show('Please select a sprite for your pokemon.', 'Fail', { status: error });
@@ -150,5 +176,13 @@ export class ShowItemComponent implements OnChanges, OnDestroy, OnInit {
 
   selectPokemonSprite(spriteKey: string) {
     this.selectedSprite = spriteKey;
+  }
+
+  triggerPokemonCrudHandler() {
+    if (this.isPokemonListCustom) {
+      this.handleUpdate();
+    } else {
+      this.handleSubmit();
+    }
   }
 }

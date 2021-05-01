@@ -1,6 +1,5 @@
 <jw-modal (triggerClose)="listenerModalCloseEvent($event)" modalId="item-modal">
   <nb-card class="card">
-    <nb-card-header>{{ selectedPokemon ? 'existe ' + selectedPokemon.displayName : 'no existe perro...' }}</nb-card-header>
     <nb-card-body>
       <div class="main-control">
         <div class="main-control-row">
@@ -48,7 +47,7 @@
       </div>
     </nb-card-body>
     <nb-card-footer>
-      <button outline nbButton (click)="handleSubmit()">{{ btnText }}</button>
+      <button outline nbButton (click)="triggerPokemonCrudHandler()">{{ btnText }}</button>
     </nb-card-footer>
   </nb-card>
 </jw-modal>

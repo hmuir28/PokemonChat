@@ -13,10 +13,22 @@ class PokemonController extends Controller {
   constructor(service: PokemonService) {
     super(service);
     this.getUserPokemons = this.getUserPokemons.bind(this);
+    this.updatePokemon = this.updatePokemon.bind(this);
   }
 
   async getUserPokemons(req: Request, res: Response) {
     return res.status(200).send(await pokemonService.getUserPokemons(req.params));
+  }
+
+  async updatePokemon(req: Request, res: Response) {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(500);
+    }
+
+    const updatedPokemon = await this.update(req, res); 
+    return updatedPokemon;
   }
 }
 

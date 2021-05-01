@@ -39,4 +39,8 @@ export class PokemonService {
   getPokemon(url: string): Observable<PokemonDetails> {
     return this.http.get<PokemonDetails>(url);
   }
+
+  updatePokemon(pokemonId: string, userPokemon: UserPokemon, url = serverUrl): Observable<HttpResponse> {
+    return this.http.put<HttpResponse>(`${url}/${pokemonId}`, userPokemon);
+  }
 }
