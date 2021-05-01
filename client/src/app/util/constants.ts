@@ -1,11 +1,10 @@
-export const localStorageKeys = {
-  user: 'user',
+export const buttonText = {
+  update: 'Update',
+  submit: 'Submit',
 };
 
-export const routes = {
-  login: 'login',
-  pokemons: 'pokemons',
-  signup: 'signup',
+export const localStorageKeys = {
+  user: 'user',
 };
 
 export const messageStatus = {
@@ -16,4 +15,10 @@ export const messageStatus = {
 export const pokemonTabs = {
   customPokemons: 'My Custom Pokemons List',
   officialPokemons: 'All Pokemons List',
+};
+
+export const routes = {
+  login: 'login',
+  pokemons: 'pokemons',
+  signup: 'signup',
 };

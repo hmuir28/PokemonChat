@@ -1,13 +1,14 @@
-import { Component, Input, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
 import { cloneDeep } from 'lodash';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
-import { localStorageKeys, messageStatus } from '../../../../util/constants';
+import { buttonText, localStorageKeys, messageStatus } from '../../../../util/constants';
 import { PokemonService } from '../../../../services/pokemon.service';
 import PokemonDetails from '../../../../models/pokemon-details';
 import UserPokemon from '../../../../models/user-pokemon';
 
+const { update, submit } = buttonText;
 const { success, error } = messageStatus;
 
 @Component({
@@ -15,7 +16,7 @@ const { success, error } = messageStatus;
   templateUrl: './show-item.component.html',
   styleUrls: ['./show-item.component.scss'],
 })
-export class ShowItemComponent implements OnChanges, OnDestroy {
+export class ShowItemComponent implements OnChanges, OnDestroy, OnInit {
   @Input()
   isPokemonListCustom?: boolean;
 
@@ -30,6 +31,7 @@ export class ShowItemComponent implements OnChanges, OnDestroy {
     sprites: {},
   };
 
+  btnText: string = 'Submit';
   modalClose: () => void = () => ({});
   selectedPokemon: PokemonDetails = {
     abilities: [],
@@ -49,6 +51,10 @@ export class ShowItemComponent implements OnChanges, OnDestroy {
     private pokemonService: PokemonService,
     private toastrService: NbToastrService,
   ) {
+  }
+
+  ngOnInit() {
+    this.loadBtnText();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -82,6 +88,10 @@ export class ShowItemComponent implements OnChanges, OnDestroy {
               };
             }
 
+            break;
+
+          case 'isPokemonListCustom':
+            this.loadBtnText();
             break;
         }
       }
@@ -128,6 +138,14 @@ export class ShowItemComponent implements OnChanges, OnDestroy {
 
   listenerModalCloseEvent({ modalClose }: any) {
     this.modalClose = modalClose;
+  }
+
+  loadBtnText() {
+    if (!this.isPokemonListCustom) {
+      this.btnText = submit;
+    } else {
+      this.btnText = update;
+    }
   }
 
   selectPokemonSprite(spriteKey: string) {
