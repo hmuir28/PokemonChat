@@ -61,10 +61,9 @@ export class ShowItemComponent implements OnChanges, OnDestroy, OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     for (const change in changes) {
-      if (changes.hasOwnProperty(change) && changes[change].currentValue) {
+      if (changes.hasOwnProperty(change)) {
         switch(change) {
           case 'pokemon':
-
             if (!this.pokemon) {
               return;
             }
@@ -86,9 +85,14 @@ export class ShowItemComponent implements OnChanges, OnDestroy, OnInit {
                   this.spritesKeys = Object.keys(this.selectedPokemon.sprites);
                 });
             } else {
-              this.selectedPokemon = {
-                ...this.pokemon,
-              };
+              this.pokemonService
+                .getUserPokemon(this.pokemon._id)
+                .then(({ response }) => {
+                  const { item } = response;
+                  this.selectedPokemon = {
+                    ...item,
+                  };
+                });
             }
 
             break;

@@ -36,6 +36,10 @@ export class PokemonService {
     return this.http.get<HttpResponse>(url, { params }).toPromise();
   }
 
+  getUserPokemon(pokemonId: string, url = serverUrl): Promise<HttpResponse> {
+    return this.http.get<HttpResponse>(`${url}/${pokemonId}`).toPromise();
+  }
+
   getPokemon(url: string): Observable<PokemonDetails> {
     return this.http.get<PokemonDetails>(url);
   }
