@@ -25,7 +25,6 @@ class Controller {
   }
 
   async insert(req: Request, res: Response) {
-    console.log(req.body);
     const response = await this.service.insert(req.body);
     if (response.errors) return res.status(response.statusCode || 500).send(response);
     return res.status(201).send(response);

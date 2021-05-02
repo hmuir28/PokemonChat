@@ -71,7 +71,7 @@ class Service {
         displayName: pokemonDetails.displayName,
         description: pokemonDetails.description,
         logoUrl: pokemonDetails.sprites.logoUrl,
-        moreDetailUrl: pokemonDetails.url,
+        moreDetailUrl: pokemonDetails.moreDetailUrl,
         name: pokemonDetails.name,
       });
 

@@ -48,6 +48,7 @@ export class ShowItemComponent implements OnChanges, OnDestroy, OnInit {
   selectedSprite?: string;
   spritesKeys: string[] = [];
   pokemonDetailSubscription?: Subscription;
+  userInfo: any;
   
   constructor(
     private pokemonService: PokemonService,
@@ -56,7 +57,7 @@ export class ShowItemComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.loadBtnText();
+    this.handleOnInit();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -86,7 +87,7 @@ export class ShowItemComponent implements OnChanges, OnDestroy, OnInit {
                 });
             } else {
               this.pokemonService
-                .getUserPokemon(this.pokemon._id)
+                .getUserPokemon(this.userInfo.uid, this.pokemon._id)
                 .then(({ response }) => {
                   const { item } = response;
                   this.selectedPokemon = {
@@ -115,16 +116,27 @@ export class ShowItemComponent implements OnChanges, OnDestroy, OnInit {
     return typeof obj === 'string';
   }
 
+  handleOnInit() {
+    const userInfo = localStorage.getItem(localStorageKeys.user);
+
+    if (userInfo) {
+      this.userInfo = JSON.parse(userInfo);
+    } else {
+      /** @todo add error message */
+      throw new Error('Error');
+    }
+
+    this.loadBtnText();
+  }
+
   handleToastrPokemon(msg: string, title: string, status: { [key: string]: string }, modalClose: Function = () => {}) {
     this.toastrService.show(msg, title, status);
     modalClose();
   }
 
   handleSubmit() {
-    const userInfo = localStorage.getItem(localStorageKeys.user);
-
-    if (userInfo && this.selectedSprite && this.selectedPokemon) {
-      const { uid } = JSON.parse(userInfo);
+    if (this.selectedSprite && this.selectedPokemon) {
+      const { uid } = this.userInfo;
       const clonedPokemon = cloneDeep(this.selectedPokemon);
 
       clonedPokemon.sprites = { logoUrl: this.selectedPokemon.sprites[this.selectedSprite] };
@@ -138,17 +150,15 @@ export class ShowItemComponent implements OnChanges, OnDestroy, OnInit {
         .then(() => this.handleToastrPokemon('The pokemon was submitted!', 'Successful', { status: success }, this.modalClose))
         .catch(() => this.handleToastrPokemon('The pokemon cannot be submitted!', 'Fail', { status: error }));
     } else {
-      // TODO: Replace this toastr with form validation errors below each corresponding field.
+      /** @todo Replace this toastr with form validation errors below each corresponding field. */
       this.toastrService.show('Please select a sprite for your pokemon.', 'Fail', { status: error });
     }
   }
 
   handleUpdate() {
-    const userInfo = localStorage.getItem(localStorageKeys.user);
-
-    // TODO: Implement feature to update sprites
-    if (userInfo && this.selectedPokemon) {
-      const { uid } = JSON.parse(userInfo);
+    /** @todo Implement feature to update sprites */
+    if (this.selectedPokemon) {
+      const { uid } = this.userInfo;
       const clonedPokemon = cloneDeep(this.selectedPokemon);
 
       const userPokemon: UserPokemon = {
@@ -156,12 +166,12 @@ export class ShowItemComponent implements OnChanges, OnDestroy, OnInit {
         pokemonDetails: clonedPokemon,
       };
 
-      this.pokemonService.updatePokemon(clonedPokemon._id, userPokemon)
+      this.pokemonService.updatePokemon(uid, clonedPokemon._id, userPokemon)
         .toPromise()
         .then(() => this.handleToastrPokemon('The pokemon was updated!', 'Successful', { status: success }, this.modalClose))
         .catch(() => this.handleToastrPokemon('The pokemon cannot be updated!', 'Fail', { status: error }));
     } else {
-      // TODO: Replace this toastr with form validation errors below each corresponding field.
+      /** @todo Replace this toastr with form validation errors below each corresponding field. */
       this.toastrService.show('Please select a sprite for your pokemon.', 'Fail', { status: error });
     }
   }

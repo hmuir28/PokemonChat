@@ -11,8 +11,10 @@ class PokemonService extends Service {
     const httpResponse = new HttpResponse();
 
     try {
-      const items = await this.model.find({ uid: query.uid });
-      console.log(items);
+      const items = await this.model
+        .find({ uid: query.uid })
+        .select(['displayName', 'moreDetailUrl']);
+
       httpResponse.statusCode = 200;
       httpResponse.response = { items };
 

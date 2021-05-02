@@ -31,20 +31,18 @@ export class PokemonService {
   }
 
   getUserPokemons(uid: string, url = serverUrl): Promise<HttpResponse> {
-    const params = new HttpParams();
-    params.set('uid', uid);
-    return this.http.get<HttpResponse>(url, { params }).toPromise();
+    return this.http.get<HttpResponse>(`${url}/user/${uid}/pokemons`).toPromise();
   }
 
-  getUserPokemon(pokemonId: string, url = serverUrl): Promise<HttpResponse> {
-    return this.http.get<HttpResponse>(`${url}/${pokemonId}`).toPromise();
+  getUserPokemon(uid: string, pokemonId: string, url = serverUrl): Promise<HttpResponse> {
+    return this.http.get<HttpResponse>(`${url}/user/${uid}/pokemon/${pokemonId}`).toPromise();
   }
 
   getPokemon(url: string): Observable<PokemonDetails> {
     return this.http.get<PokemonDetails>(url);
   }
 
-  updatePokemon(pokemonId: string, userPokemon: UserPokemon, url = serverUrl): Observable<HttpResponse> {
-    return this.http.put<HttpResponse>(`${url}/${pokemonId}`, userPokemon);
+  updatePokemon(uid: string, pokemonId: string, userPokemon: UserPokemon, url = serverUrl): Observable<HttpResponse> {
+    return this.http.put<HttpResponse>(`${url}/user/${uid}/pokemon/${pokemonId}`, userPokemon);
   }
 }
