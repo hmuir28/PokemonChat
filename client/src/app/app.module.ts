@@ -20,6 +20,8 @@ import {
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 
+// Custom Modules
+import { ExchangePokemonsModule } from './exchange-pokemons/exchange-pokemons.module';
 import { PokemonsModule } from './pokemons/pokemons.module';
 
 // Custom Angular Files
@@ -34,7 +36,6 @@ import FirebaseConfig from './config/firebase-config';
 
 // Custom Interceptor Files
 import { CommonInterceptor } from './interceptors/common-interceptor';
-import { ExchangePokemonsComponent } from './exchange-pokemons/exchange-pokemons.component';
 
 @NgModule({
   declarations: [
@@ -42,13 +43,13 @@ import { ExchangePokemonsComponent } from './exchange-pokemons/exchange-pokemons
     LoginComponent,
     SignupComponent,
     NavbarComponent,
-    ExchangePokemonsComponent,
   ],
   imports: [
     AppRoutingModule,
     AngularFireModule.initializeApp(FirebaseConfig),
     BrowserModule,
     BrowserAnimationsModule,
+    ExchangePokemonsModule,
     FormsModule,
     HttpClientModule,
     NbThemeModule.forRoot({ name: 'cosmic' }),

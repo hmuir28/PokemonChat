@@ -6,9 +6,9 @@ import {
   NbTreeGridDataSourceBuilder,
 } from '@nebular/theme';
 
-import Pokemon from '../../../models/pokemon';
-import { WebSocketService } from '../../../services/websocket.service';
-import PokemonDetails from '../../../models/pokemon-details';
+import Pokemon from '../../models/pokemon';
+import { WebSocketService } from '../../services/websocket.service';
+import PokemonDetails from '../../models/pokemon-details';
 
 interface TreeNode<T> {
   data: T;

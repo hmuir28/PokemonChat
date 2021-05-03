@@ -3,10 +3,10 @@ import { NbToastrService } from '@nebular/theme';
 import { cloneDeep } from 'lodash';
 import { Subscription } from 'rxjs';
 
-import { buttonText, localStorageKeys, messageStatus } from '../../../../util/constants';
-import { PokemonService } from '../../../../services/pokemon.service';
-import PokemonDetails from '../../../../models/pokemon-details';
-import UserPokemon from '../../../../models/user-pokemon';
+import { buttonText, localStorageKeys, messageStatus } from '../../../util/constants';
+import { PokemonService } from '../../../services/pokemon.service';
+import PokemonDetails from '../../../models/pokemon-details';
+import UserPokemon from '../../../models/user-pokemon';
 
 const { update, submit } = buttonText;
 const { success, error } = messageStatus;

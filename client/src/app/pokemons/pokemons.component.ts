@@ -49,7 +49,7 @@ export class PokemonsComponent implements OnInit {
   }
 
   joinChatRoom() {
-    this.router.navigate([routes.pokemonChatRoom]);
+    this.router.navigate([routes.exchangePokemonsRoom]);
   }
 
   pokemonSelectionListener(pokemon: PokemonDetails) {
