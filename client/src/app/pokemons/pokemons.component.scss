@@ -1,0 +1,11 @@
+:host nb-tab {
+  padding: 1.25rem;
+}
+
+.pokemons {
+  .pokemons__section-1 {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 1.25rem 0 0;
+  }
+}

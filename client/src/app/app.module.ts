@@ -34,6 +34,7 @@ import FirebaseConfig from './config/firebase-config';
 
 // Custom Interceptor Files
 import { CommonInterceptor } from './interceptors/common-interceptor';
+import { ExchangePokemonsComponent } from './exchange-pokemons/exchange-pokemons.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { CommonInterceptor } from './interceptors/common-interceptor';
     LoginComponent,
     SignupComponent,
     NavbarComponent,
+    ExchangePokemonsComponent,
   ],
   imports: [
     AppRoutingModule,

@@ -21,18 +21,18 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 
 // Custom Angular Files
 import { PokemonsRoutingModule } from './pokemons-routing.module';
-import { MainPanelComponent } from './main-panel/main-panel.component';
-import { ModalComponent } from './main-panel/item-table/modal/modal.component';
-import { ItemTableComponent } from './main-panel/item-table/item-table.component';
-import { ShowItemComponent } from './main-panel/item-table/show-item/show-item.component';
+import { PokemonsComponent } from './pokemons.component';
+import { ModalComponent } from './item-table/modal/modal.component';
+import { ItemTableComponent } from './item-table/item-table.component';
+import { ShowItemComponent } from './item-table/show-item/show-item.component';
 
 // Custom Configuration Files
 
 @NgModule({
   declarations: [
-    MainPanelComponent,
-    ModalComponent,
     ItemTableComponent,
+    ModalComponent,
+    PokemonsComponent,
     ShowItemComponent,
   ],
   imports: [

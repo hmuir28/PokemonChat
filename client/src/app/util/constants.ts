@@ -20,5 +20,6 @@ export const pokemonTabs = {
 export const routes = {
   login: 'login',
   pokemons: 'pokemons',
+  pokemonChatRoom: 'pokemon-chat-room',
   signup: 'signup',
 };

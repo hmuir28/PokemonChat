@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-import Pokemon from '../../models/pokemon';
-import PokemonDetails from '../../models/pokemon-details';
+import Pokemon from '../models/pokemon';
+import PokemonDetails from '../models/pokemon-details';
 import { ModalService } from './item-table/modal/modal.service';
-import { IPokemonsResponse, PokemonService } from '../../services/pokemon.service';
+import { IPokemonsResponse, PokemonService } from '../services/pokemon.service';
 
-import { localStorageKeys, pokemonTabs } from '../../util/constants';
+import { localStorageKeys, pokemonTabs, routes } from '../util/constants';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-main-panel',
-  templateUrl: './main-panel.component.html',
-  styleUrls: ['./main-panel.component.scss']
+  selector: 'app-pokemons',
+  templateUrl: './pokemons.component.html',
+  styleUrls: ['./pokemons.component.scss']
 })
-export class MainPanelComponent implements OnInit {
-
+export class PokemonsComponent implements OnInit {
   isPokemonListCustom: boolean = false;
   pokemons: Pokemon[] = [];
   pokemon$?: Observable<PokemonDetails>;
@@ -22,6 +22,7 @@ export class MainPanelComponent implements OnInit {
   constructor(
     private modalService: ModalService,
     private pokemonService: PokemonService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -36,13 +37,19 @@ export class MainPanelComponent implements OnInit {
     }
 
     const { uid } = JSON.parse(userInfo);
-    return this.pokemonService.getUserPokemons(uid)
+    return this.pokemonService
+      .getUserPokemons(uid)
       .then(({ response }) => this.pokemons = response.items);
   }
 
   handleOfficialPokemonsList() {
-    return this.pokemonService.getPokemons()
+    return this.pokemonService
+      .getPokemons()
       .then(({ results: pokemons }: IPokemonsResponse) => this.pokemons = pokemons);
+  }
+
+  joinChatRoom() {
+    this.router.navigate([routes.pokemonChatRoom]);
   }
 
   pokemonSelectionListener(pokemon: PokemonDetails) {
